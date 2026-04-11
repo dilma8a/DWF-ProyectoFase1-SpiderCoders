@@ -3,8 +3,8 @@ package com.spidercoders.dwf.dao;
 import com.spidercoders.dwf.pojos.Persona;
 import com.spidercoders.dwf.utilidades.JPAUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import java.util.List;
 
 public class PersonaDao {

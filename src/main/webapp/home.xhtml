@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+<h:head>
+    <title>Home</title>
+</h:head>
+<h:body>
+    <h1>Home Proyecto Fase 1</h1>
+    <p>Acceso por roles con usuario simulado.</p>
+    <p><a href="#{request.contextPath}/login">Ir a Login</a></p>
+    <p><a href="#{request.contextPath}/portal">Ir a pagina por rol</a></p>
+    <p><a href="#{request.contextPath}/gerente-general/inicio">Probar ruta GERENTE GENERAL</a></p>
+    <p><a href="#{request.contextPath}/gerente-sucursal/inicio">Probar ruta GERENTE SUCURSAL</a></p>
+    <p><a href="#{request.contextPath}/dependiente/inicio">Probar ruta DEPENDIENTE</a></p>
+    <p><a href="#{request.contextPath}/cajero/inicio">Probar ruta CAJERO</a></p>
+    <p><a href="#{request.contextPath}/cliente/inicio">Probar ruta CLIENTE</a></p>
+    <p><a href="#{request.contextPath}/logout">Cerrar sesion</a></p>
+</h:body>
+</html>
