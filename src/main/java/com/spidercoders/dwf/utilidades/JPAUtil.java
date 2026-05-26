@@ -1,8 +1,8 @@
 package com.spidercoders.dwf.utilidades;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public final class JPAUtil {
 
@@ -15,3 +15,4 @@ public final class JPAUtil {
         return EMF.createEntityManager();
     }
 }
+
