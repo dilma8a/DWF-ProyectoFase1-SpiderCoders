@@ -7,8 +7,10 @@
 <h:body>
     <h1>Panel Dependiente</h1>
     <p>Bienvenido usuario DEPENDIENTE del Banco de Agricultura Salvadoreño SA de CV.</p>
-    <p><a href="#{request.contextPath}/dependiente/inicio">Recargar pagina por defecto</a></p>
-    <p><a href="#{request.contextPath}/logout">Cerrar sesion</a></p>
+    <h:form>
+        <p><h:commandLink action="#{navigationBean.dependiente}" value="Recargar pagina por defecto" /></p>
+        <p><h:commandLink action="#{navigationBean.logout}" value="Cerrar sesion" /></p>
+    </h:form>
 </h:body>
 </html>
 

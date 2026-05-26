@@ -7,8 +7,10 @@
 <h:body>
     <h1>Panel Cliente</h1>
     <p>Bienvenido usuario CLIENTE del Banco de Agricultura Salvadoreño SA de CV.</p>
-    <p><a href="#{request.contextPath}/cliente/inicio">Recargar pagina por defecto</a></p>
-    <p><a href="#{request.contextPath}/logout">Cerrar sesion</a></p>
+    <h:form>
+        <p><h:commandLink action="#{navigationBean.cliente}" value="Recargar pagina por defecto" /></p>
+        <p><h:commandLink action="#{navigationBean.logout}" value="Cerrar sesion" /></p>
+    </h:form>
 </h:body>
 </html>
 

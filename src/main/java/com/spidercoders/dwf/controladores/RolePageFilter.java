@@ -21,7 +21,7 @@ public class RolePageFilter implements Filter {
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("role") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login.xhtml");
             return;
         }
 

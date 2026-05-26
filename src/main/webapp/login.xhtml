@@ -1,37 +1,368 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 <h:head>
-    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banco de Agricultura Salvadoreño - Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-gold: #d48806;
+            --bas-gold-hover: #b77605;
+            --text-main: #1f366a;
+            --text-muted: #6b7280;
+            --line-soft: #d7dde6;
+            --bg-page: #d8dade;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+        }
+
+        .page-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+
+        .login-shell {
+            width: min(980px, 100%);
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+            background: #fff;
+        }
+
+        .left-panel {
+            background: var(--bas-blue-dark);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 34px;
+            gap: 20px;
+        }
+
+        .brand-title {
+            margin: 0;
+            max-width: 360px;
+            font-weight: 800;
+            font-size: clamp(2rem, 3.1vw, 2.9rem);
+            line-height: 1.12;
+        }
+
+        .brand-line {
+            display: block;
+        }
+
+        .brand-mark {
+            margin-bottom: 4px;
+            width: 80px;
+            height: 80px;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d48806;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.04em;
+        }
+
+        .right-panel {
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 34px;
+        }
+
+        .auth-card {
+            width: min(380px, 100%);
+        }
+
+        .form-title {
+            margin: 0;
+            text-align: center;
+            color: var(--text-main);
+            font-size: clamp(2rem, 2.2vw, 2.3rem);
+            font-weight: 800;
+        }
+
+        .form-subtitle {
+            margin: 10px 0 22px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            line-height: 1.35;
+        }
+
+        .message {
+            margin: 0 0 12px;
+            text-align: center;
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .auth-card ul {
+            margin: 0 0 8px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .message.error {
+            color: #b42318;
+        }
+
+        .message.ok {
+            color: #067647;
+        }
+
+        .login-form {
+            display: grid;
+            gap: 12px;
+        }
+
+        .field-group {
+            display: grid;
+            gap: 6px;
+        }
+
+        .input-shell {
+            display: flex;
+            align-items: center;
+            min-height: 50px;
+            border: 1px solid var(--line-soft);
+            border-radius: 10px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .field-icon {
+            width: 42px;
+            min-width: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9aa4b2;
+        }
+
+        .field-input {
+            width: 100%;
+            min-height: 50px;
+            border: 0;
+            outline: none;
+            padding: 0 12px 0 0;
+            font-size: 0.98rem;
+            color: var(--text-main);
+            background: transparent;
+        }
+
+        .field-input::placeholder {
+            color: #667085;
+        }
+
+        .field-hint {
+            margin: 0;
+            font-size: 0.76rem;
+            color: #98a2b3;
+        }
+
+        .toggle-button {
+            min-width: 46px;
+            height: 50px;
+            border: 0;
+            border-left: 1px solid var(--line-soft);
+            background: #fff;
+            color: #98a2b3;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .toggle-button:hover {
+            background: #f8fafc;
+        }
+
+        .forgot-row {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 2px;
+        }
+
+        .forgot-link {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 50px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--bas-gold);
+            color: #ffffff;
+            font-size: 1.06rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(209, 141, 3, 0.22);
+        }
+
+        .submit-button:hover {
+            background: var(--bas-gold-hover);
+        }
+
+        .register-row {
+            margin-top: 4px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .register-link {
+            color: var(--text-main);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 920px) {
+            .page-shell {
+                padding: 16px;
+            }
+
+            .login-shell {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .left-panel {
+                padding: 32px 20px;
+            }
+
+            .brand-title {
+                max-width: 300px;
+                font-size: 2.1rem;
+            }
+
+            .right-panel {
+                padding: 24px 18px 30px;
+            }
+        }
+    </style>
 </h:head>
 <h:body>
-    <h1>Inicio de sesion</h1>
+    <div class="page-shell">
+        <div class="login-shell">
+            <div class="left-panel">
+                <div class="brand-mark">BAS</div>
+                <h1 class="brand-title">
+                    <span class="brand-line">Banco de Agricultura</span>
+                    <span class="brand-line">Salvadoreño</span>
+                </h1>
+            </div>
 
-    <h:panelGroup rendered="#{not empty param.error}">
-        <p style="color: red;">Usuario o clave incorrectos.</p>
-    </h:panelGroup>
-    <h:panelGroup rendered="#{not empty param.logout}">
-        <p style="color: green;">Sesion finalizada correctamente.</p>
-    </h:panelGroup>
+            <div class="right-panel">
+                <div class="auth-card">
+                    <h2 class="form-title">Iniciar Sesión</h2>
+                    <p class="form-subtitle">Bienvenido, por favor<br />ingresa tus datos</p>
 
-    <form method="post" action="#{request.contextPath}/login">
-        <label for="username">Usuario</label>
-        <input id="username" name="username" type="text" required="required"/>
-        <br/>
-        <label for="password">Clave</label>
-        <input id="password" name="password" type="password" required="required"/>
-        <br/>
-        <button type="submit">Ingresar</button>
-    </form>
+                    <h:panelGroup layout="block" rendered="#{not empty param.logout}">
+                        <p class="message ok">Sesión finalizada correctamente.</p>
+                    </h:panelGroup>
 
-    <h3>Usuarios de prueba</h3>
-    <ul>
-        <li>gerente_general / gerente123</li>
-        <li>gerente_sucursal / sucursal123</li>
-        <li>dependiente / dependiente123</li>
-        <li>cajero / cajero123</li>
-        <li>cliente / cliente123</li>
-    </ul>
+                    <h:messages globalOnly="true" layout="list" errorClass="message error" infoClass="message ok" warnClass="message error" />
+
+                    <h:form id="loginForm" prependId="false" styleClass="login-form">
+                        <h:panelGroup layout="block" styleClass="field-group">
+                            <div class="input-shell">
+                                <span class="field-icon" aria-hidden="true">U</span>
+                                <h:inputText id="username"
+                                             value="#{loginBean.username}"
+                                             styleClass="field-input"
+                                             pt:autocomplete="username"
+                                             pt:placeholder="Usuario o Email"
+                                             pt:required="required" />
+                            </div>
+                            <p class="field-hint">Ingrese su usuario</p>
+                        </h:panelGroup>
+
+                        <h:panelGroup layout="block" styleClass="field-group">
+                            <div class="input-shell">
+                                <span class="field-icon" aria-hidden="true">C</span>
+                                <h:inputSecret id="password"
+                                               value="#{loginBean.password}"
+                                               redisplay="true"
+                                               styleClass="field-input"
+                                               pt:autocomplete="current-password"
+                                               pt:placeholder="Contraseña"
+                                               pt:required="required" />
+                                <button class="toggle-button" type="button" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
+                                    Ver
+                                </button>
+                            </div>
+                            <p class="field-hint">Ingrese su contraseña</p>
+                        </h:panelGroup>
+
+                        <div class="forgot-row">
+                            <h:outputLink value="#" styleClass="forgot-link">¿Olvidaste tu contraseña?</h:outputLink>
+                        </div>
+
+                        <h:commandButton value="Ingresar" action="#{loginBean.login}" styleClass="submit-button" />
+
+                        <div class="register-row">
+                            ¿No tienes cuenta?
+                            <br />
+                            <h:outputLink value="#" styleClass="register-link">Registrate</h:outputLink>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h:outputScript target="body">
+        function togglePassword() {
+            var passwordInput = document.getElementById('password');
+            if (!passwordInput) {
+                return;
+            }
+
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        }
+    </h:outputScript>
 </h:body>
 </html>
-

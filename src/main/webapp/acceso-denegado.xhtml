@@ -7,8 +7,10 @@
 <h:body>
     <h1>Acceso denegado</h1>
     <p>Tu usuario no tiene permisos para ver esta ruta.</p>
-    <p><a href="#{request.contextPath}/portal">Ir a mi portal</a></p>
-    <p><a href="#{request.contextPath}/logout">Cerrar sesion</a></p>
+    <h:form>
+        <p><h:commandLink action="#{navigationBean.portal}" value="Ir a mi portal" /></p>
+        <p><h:commandLink action="#{navigationBean.logout}" value="Cerrar sesion" /></p>
+    </h:form>
 </h:body>
 </html>
 

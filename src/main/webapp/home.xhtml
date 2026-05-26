@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:metadata>
+    <f:viewAction action="#{navigationBean.requireLogin}" />
+</f:metadata>
 <h:head>
     <title>Home</title>
 </h:head>
 <h:body>
     <h1>Home Proyecto Fase 1</h1>
     <p>Acceso por roles con usuario simulado.</p>
-    <p><a href="#{request.contextPath}/login">Ir a Login</a></p>
-    <p><a href="#{request.contextPath}/portal">Ir a pagina por rol</a></p>
-    <p><a href="#{request.contextPath}/gerente-general/inicio">Probar ruta GERENTE GENERAL</a></p>
-    <p><a href="#{request.contextPath}/gerente-sucursal/inicio">Probar ruta GERENTE SUCURSAL</a></p>
-    <p><a href="#{request.contextPath}/dependiente/inicio">Probar ruta DEPENDIENTE</a></p>
-    <p><a href="#{request.contextPath}/cajero/inicio">Probar ruta CAJERO</a></p>
-    <p><a href="#{request.contextPath}/cliente/inicio">Probar ruta CLIENTE</a></p>
-    <p><a href="#{request.contextPath}/logout">Cerrar sesion</a></p>
+    <h:form>
+        <p><h:link outcome="/login.xhtml" value="Ir a Login" /></p>
+        <p><h:commandLink action="#{navigationBean.portal}" value="Ir a pagina por rol" /></p>
+        <p><h:commandLink action="#{navigationBean.gerenteGeneral}" value="Probar ruta GERENTE GENERAL" /></p>
+        <p><h:commandLink action="#{navigationBean.gerenteSucursal}" value="Probar ruta GERENTE SUCURSAL" /></p>
+        <p><h:commandLink action="#{navigationBean.dependiente}" value="Probar ruta DEPENDIENTE" /></p>
+        <p><h:commandLink action="#{navigationBean.cajero}" value="Probar ruta CAJERO" /></p>
+        <p><h:commandLink action="#{navigationBean.cliente}" value="Probar ruta CLIENTE" /></p>
+        <p><h:commandLink action="#{navigationBean.logout}" value="Cerrar sesion" /></p>
+    </h:form>
 </h:body>
 </html>
 
