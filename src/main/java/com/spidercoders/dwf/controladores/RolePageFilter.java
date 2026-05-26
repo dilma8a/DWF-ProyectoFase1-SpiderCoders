@@ -1,13 +1,13 @@
 package com.spidercoders.dwf.controladores;
 
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class RolePageFilter implements Filter {
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("role") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/login.xhtml");
             return;
         }
 
@@ -43,3 +43,4 @@ public class RolePageFilter implements Filter {
         chain.doFilter(request, response);
     }
 }
+
