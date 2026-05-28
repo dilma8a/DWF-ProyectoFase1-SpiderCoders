@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      lang="es">
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperar clave - Banco de Agricultura Salvadoreño</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-blue-primary: #2954c2;
+            --bas-gold: #d48806;
+            --text-main: #1f366a;
+            --line-soft: #d7dde6;
+            --bg-page: #e1e5eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+        }
+
+        .page-shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .left-panel {
+            background: var(--bas-blue-dark);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .logo-mark {
+            width: 80px;
+            height: 80px;
+            border-radius: 0;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 22C12 22 12 18 12 14' stroke='%23d48806' stroke-linecap='round' stroke-width='2'/%3E%3Cpath d='M12 14C10 12 7 11 7 8C7 5 9 4 11 4C11 4 11.5 6 12 7C12.5 6 13 4 13 4C15 4 17 5 17 8C17 11 14 12 12 14Z' fill='%23d48806'/%3E%3Cpath d='M12 10C10 8.5 8 7.5 8 5.5C8 3.5 9.5 3 11 3C11 3 11.5 4.5 12 5.5C12.5 4.5 13 3 13 3C14.5 3 16 3.5 16 5.5C16 7.5 14 8.5 12 10Z' fill='%23ffffff' fill-opacity='0.8'/%3E%3Cpath d='M12 18C10.5 17 9 16 9 14.5C9 13 10 12.5 11 12.5C11 12.5 11.5 13.5 12 14C12.5 13.5 13 12.5 13 12.5C14 12.5 15 13 15 14.5C15 16 13.5 17 12 18Z' fill='%23ffffff' fill-opacity='0.6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        .bank-name {
+            margin: 0;
+            max-width: 360px;
+            font-size: clamp(2rem, 2.8vw, 3rem);
+            line-height: 1.1;
+        }
+
+        .right-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: min(460px, 100%);
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #eef2f7;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #051937;
+            font-size: 1.75rem;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #6b7280;
+            font-size: 0.92rem;
+        }
+
+        .messages {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 0.88rem;
+            list-style: none;
+        }
+
+        .form {
+            display: grid;
+            gap: 12px;
+        }
+
+        .field {
+            display: grid;
+            gap: 5px;
+        }
+
+        .field label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .input {
+            width: 100%;
+            min-height: 46px;
+            border: 1px solid var(--line-soft);
+            border-radius: 10px;
+            padding: 0 12px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .input:focus {
+            border-color: var(--bas-blue-primary);
+            box-shadow: 0 0 0 3px rgba(41, 84, 194, 0.14);
+        }
+
+        .submit {
+            min-height: 48px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--bas-blue-primary);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .submit:hover {
+            background: #1f4ab7;
+        }
+
+        .footer {
+            margin-top: 12px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #051937;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 920px) {
+            .page-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+    <main class="page-shell">
+        <section class="left-panel">
+            <div class="logo-mark" aria-label="Logo Banco de Agricultura Salvadoreño"></div>
+            <h1 class="bank-name">Banco de Agricultura Salvadoreño</h1>
+        </section>
+
+        <section class="right-panel">
+            <article class="card">
+                <div class="header">
+                    <h1>Olvidaste tu contrasena?</h1>
+                    <p>Ingresa usuario y correo para restablecer tu contrasena</p>
+                </div>
+
+                <h:form id="resetForm" prependId="false" styleClass="form">
+                    <h:messages globalOnly="true" layout="list" styleClass="messages" />
+
+                    <div class="field">
+                        <label for="usuario">Usuario</label>
+                        <h:inputText id="usuario" value="#{resetClaveBean.usuario}" styleClass="input"
+                                     required="true" requiredMessage="Ingrese su usuario"
+                                     pt:placeholder="Ingrese su usuario" />
+                    </div>
+
+                    <div class="field">
+                        <label for="correo">Correo</label>
+                        <h:inputText id="correo" value="#{resetClaveBean.correo}" styleClass="input"
+                                     required="true" requiredMessage="Ingrese su correo"
+                                     pt:type="email" pt:placeholder="Ingresa tu email" />
+                    </div>
+
+                    <div class="field">
+                        <label for="nuevaClave">Nueva contrasena</label>
+                        <h:inputSecret id="nuevaClave" value="#{resetClaveBean.nuevaClave}" redisplay="true" styleClass="input"
+                                       required="true" requiredMessage="Ingrese la nueva contrasena"
+                                       pt:placeholder="Nueva contrasena" />
+                    </div>
+
+                    <div class="field">
+                        <label for="confirmarClave">Confirmar contrasena</label>
+                        <h:inputSecret id="confirmarClave" value="#{resetClaveBean.confirmarClave}" redisplay="true" styleClass="input"
+                                       required="true" requiredMessage="Confirme la nueva contrasena"
+                                       pt:placeholder="Confirmar contrasena" />
+                    </div>
+
+                    <h:commandButton value="Restablecer contrasena" action="#{resetClaveBean.restablecerClave}" styleClass="submit" />
+                </h:form>
+
+                <div class="footer">
+                    Recuerdas tu contrasena?
+                    <h:link outcome="login" value="Inicia sesion" />
+                </div>
+            </article>
+        </section>
+    </main>
+</h:body>
+</html>
