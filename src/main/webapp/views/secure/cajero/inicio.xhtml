@@ -1,16 +1,259 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-<h:head>
-    <title>Inicio Cajero</title>
-</h:head>
-<h:body>
-    <h1>Panel Cajero</h1>
-    <p>Bienvenido usuario CAJERO del Banco de Agricultura Salvadoreño SA de CV.</p>
-    <h:form>
-        <p><h:commandLink action="#{navigationBean.cajero}" value="Recargar pagina por defecto" /></p>
-        <p><h:commandLink action="#{navigationBean.logout}" value="Cerrar sesion" /></p>
-    </h:form>
-</h:body>
-</html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+  <f:metadata>
+    <f:viewAction action="#{navigationBean.requireLogin}" />
+  </f:metadata>
+  <h:head>
+    <title>Módulo de Cajero</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </h:head>
+  <h:body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary">
+      <div class="container">
+        <span class="navbar-brand mb-0 h1">Panel de Cajero</span>
+        <h:form>
+          <h:commandButton
+            action="#{navigationBean.logout}"
+            value="Cerrar Sesión"
+            class="btn btn-sm btn-light"
+          />
+        </h:form>
+      </div>
+    </nav>
 
+    <div class="container mt-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title mb-4">Atención al Cliente</h4>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label for="duiInput" class="form-label"
+                >Ingrese el DUI del Cliente:</label
+              >
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="duiInput"
+                  class="form-control"
+                  placeholder="Ej. 12345678-9"
+                />
+                <button class="btn btn-primary" onclick="buscarCuentas()">
+                  Buscar Cuentas
+                </button>
+              </div>
+              <div
+                id="errorMsg"
+                class="text-danger mt-2"
+                style="display: none"
+              ></div>
+            </div>
+          </div>
+
+          <div id="tablaCuentasContainer" style="display: none">
+            <h5>Cuentas Asociadas</h5>
+            <table class="table table-striped table-hover mt-3">
+              <thead class="table-dark">
+                <tr>
+                  <th>Número de Cuenta</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaCuentasBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="transaccionModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Transacción</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="tipoTransaccion" />
+            <input type="hidden" id="cuentaSeleccionada" />
+
+            <p><strong>Cuenta:</strong> <span id="lblCuenta"></span></p>
+
+            <div class="mb-3">
+              <label for="montoInput" class="form-label">Monto ($):</label>
+              <input
+                type="number"
+                id="montoInput"
+                class="form-control"
+                min="0.01"
+                step="0.01"
+              />
+              <div
+                id="modalError"
+                class="text-danger mt-2"
+                style="display: none"
+              ></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="procesarTransaccion()"
+            >
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+    <script>
+      // Persona 4: Debe proporcionar la URL base y el puerto exacto donde levantará el servicio web RestFul.
+      const API_BASE_URL = "http://localhost:8080/api";
+
+      // Función para obtener las cuentas de un cliente mediante método GET
+      async function buscarCuentas() {
+        const dui = document.getElementById("duiInput").value.trim();
+        const errorMsg = document.getElementById("errorMsg");
+
+        // Validación local: evita buscar si el campo está vacío
+        if (!dui) {
+          errorMsg.innerText = "Por favor, ingrese un DUI válido.";
+          errorMsg.style.display = "block";
+          return;
+        }
+        errorMsg.style.display = "none";
+
+        try {
+          // Persona 4: Debe habilitar el endpoint GET "/cuentas/{dui}" en el backend usando Jackson para retornar un JSON.
+          const response = await fetch(`${API_BASE_URL}/cuentas/${dui}`);
+          if (!response.ok)
+            throw new Error("Cliente no encontrado o sin cuentas");
+
+          const cuentas = await response.json();
+          mostrarTabla(cuentas);
+        } catch (error) {
+          alert("Error al buscar: " + error.message);
+          document.getElementById("tablaCuentasContainer").style.display =
+            "none";
+        }
+      }
+
+      // Función para inyectar los datos en el HTML
+      function mostrarTabla(cuentas) {
+        const tbody = document.getElementById("tablaCuentasBody");
+        tbody.innerHTML = "";
+
+        cuentas.forEach((cuenta) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td>${cuenta.numeroCuenta || cuenta}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success me-2" onclick="abrirModal('abono', '${cuenta.numeroCuenta || cuenta}')">Abonar</button>
+                        <button class="btn btn-sm btn-danger" onclick="abrirModal('retiro', '${cuenta.numeroCuenta || cuenta}')">Retirar</button>
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById("tablaCuentasContainer").style.display =
+          "block";
+      }
+
+      // Función para configurar y mostrar la ventana flotante (Modal)
+      const modal = new bootstrap.Modal(
+        document.getElementById("transaccionModal"),
+      );
+
+      function abrirModal(tipo, numeroCuenta) {
+        document.getElementById("tipoTransaccion").value = tipo;
+        document.getElementById("cuentaSeleccionada").value = numeroCuenta;
+        document.getElementById("lblCuenta").innerText = numeroCuenta;
+        document.getElementById("montoInput").value = "";
+        document.getElementById("modalError").style.display = "none";
+
+        document.getElementById("modalTitle").innerText =
+          tipo === "abono" ? "Abonar Efectivo" : "Retirar Efectivo";
+        modal.show();
+      }
+
+      // Función para ejecutar el Abono o Retiro mediante método POST
+      async function procesarTransaccion() {
+        const tipo = document.getElementById("tipoTransaccion").value;
+        const cuenta = document.getElementById("cuentaSeleccionada").value;
+        const monto = parseFloat(document.getElementById("montoInput").value);
+        const modalError = document.getElementById("modalError");
+
+        // Validación local: evita enviar datos nulos o negativos
+        if (isNaN(monto) || monto <= 0) {
+          modalError.innerText = "El monto debe ser un número mayor a cero.";
+          modalError.style.display = "block";
+          return;
+        }
+        modalError.style.display = "none";
+
+        // Persona 3: Si se requiere autorización del Gerente de Sucursal para transacciones muy altas, esta lógica deberá conectarse con las pantallas o backend que elabore la Persona 3.
+
+        const endpoint =
+          tipo === "abono" ? "/abonarefectivo" : "/retirarefectivo";
+        const bodyData = { cuenta: cuenta };
+
+        // Construcción del JSON según la operación
+        if (tipo === "abono") {
+          bodyData.abono = monto;
+        } else {
+          bodyData.monto = monto;
+        }
+
+        try {
+          // Persona 4: Debe asegurar que los endpoints POST reciban el JSON correctamente estructurado y procesen las operaciones en la base de datos de MySQL.
+          const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(bodyData),
+          });
+
+          if (!response.ok)
+            throw new Error(
+              "Fallo en la transacción. Verifique los datos o el saldo.",
+            );
+
+          alert(
+            `Transacción exitosa: ${tipo.toUpperCase()} de $${monto} en la cuenta ${cuenta}.`,
+          );
+          modal.hide();
+        } catch (error) {
+          alert("Error al procesar la transacción: " + error.message);
+        }
+      }
+    </script>
+  </h:body>
+</html>
