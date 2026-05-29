@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Mis Prestamos - Banco BAS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-gold: #d48806;
+            --bas-gold-hover: #b77605;
+            --text-main: #1f366a;
+            --text-muted: #6b7280;
+            --line-soft: #d7dde6;
+            --bg-page: #d8dade;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--bas-blue-dark);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 28px 24px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-brand svg {
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand-text span:first-child {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand-text span:last-child {
+            color: var(--bas-gold);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-nav li a {
+            display: block;
+            color: #c8d0dc;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li.active a {
+            color: #ffffff;
+            background: rgba(212, 136, 6, 0.2);
+            border-left-color: var(--bas-gold);
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-user {
+            color: #c8d0dc;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-user strong {
+            display: block;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .logout-link,
+        .logout-link:visited {
+            display: inline-block;
+            color: #f87171;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(248,113,113,0.35);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .logout-link:hover {
+            background: rgba(248,113,113,0.12);
+            color: #fca5a5;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            margin-left: 260px;
+            padding: 28px;
+            background: var(--bg-page);
+            min-height: 100vh;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-header-title h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .page-header-title p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .btn-primary {
+            background: var(--bas-gold);
+            color: #ffffff;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--bas-gold-hover);
+            transform: translateY(-1px);
+        }
+
+        /* ── ALERT ── */
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            border-left: 4px solid #10b981;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        /* ── DATA TABLE ── */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .data-table thead tr {
+            background: var(--bas-blue-dark);
+            color: #ffffff;
+        }
+
+        .data-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f0f4ff;
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .data-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        /* ── BADGES ── */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state svg {
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* ── PAGE FOOTER ── */
+        .page-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line-soft);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px;
+            }
+            .card {
+                overflow-x: auto;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+
+    <f:metadata>
+        <f:viewAction action="#{prestamoBean.cargarMisPrestamos}" />
+    </f:metadata>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="38" height="38" rx="9" fill="#d48806"/>
+                <path d="M7 27h24M19 11v16M10 20h18M13 15l6-4 6 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="sidebar-brand-text">
+                <span>Banco BAS</span>
+                <span>Cajero</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li>
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/inicio.xhtml">
+                    Dashboard
+                </h:outputLink>
+            </li>
+            <li>
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamo-apertura.xhtml">
+                    Apertura Prestamo
+                </h:outputLink>
+            </li>
+            <li class="active">
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamos-lista.xhtml">
+                    Mis Prestamos
+                </h:outputLink>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <strong>#{sessionScope.username}</strong>
+                Cajero
+            </div>
+            <h:form>
+                <h:commandLink action="#{navigationBean.logout}" styleClass="logout-link">
+                    Cerrar sesion
+                </h:commandLink>
+            </h:form>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <div class="page-header">
+            <div class="page-header-title">
+                <h1>Mis Prestamos</h1>
+                <p>Historial de prestamos aperturados por ti.</p>
+            </div>
+            <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamo-apertura.xhtml" styleClass="btn-primary">
+                + Nueva Apertura
+            </h:outputLink>
+        </div>
+
+        <!-- Mensaje de resultado (ej. confirmacion exitosa) -->
+        <h:panelGroup layout="block" rendered="#{not empty prestamoBean.mensajeResultado}">
+            <div class="alert-success">#{prestamoBean.mensajeResultado}</div>
+        </h:panelGroup>
+
+        <!-- Tabla de prestamos -->
+        <h:panelGroup layout="block" rendered="#{not empty prestamoBean.misPrestamos}">
+            <div class="card">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Monto</th>
+                            <th>Cuota Mensual</th>
+                            <th>Plazo</th>
+                            <th>Tasa</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{prestamoBean.misPrestamos}" var="p">
+                            <tr>
+                                <td>#{p.idPrestamo}</td>
+                                <td>#{p.cliente.nombre}</td>
+                                <td>$<h:outputText value="#{p.montoSolicitado}"><f:convertNumber pattern="#,##0.00"/></h:outputText></td>
+                                <td>$<h:outputText value="#{p.cuotaMensual}"><f:convertNumber pattern="#,##0.00"/></h:outputText></td>
+                                <td>#{p.plazoMeses} meses</td>
+                                <td>#{p.tasaInteres}%</td>
+                                <td>
+                                    <span class="badge badge-#{p.estado == 'EN_ESPERA' ? 'warning' : (p.estado == 'APROBADO' ? 'success' : 'danger')}">
+                                        #{p.estado}
+                                    </span>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{p.fechaSolicitud}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </h:panelGroup>
+
+        <!-- Estado vacio -->
+        <h:panelGroup layout="block" rendered="#{empty prestamoBean.misPrestamos}">
+            <div class="empty-state">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M12 12h.01M12 16h.01"/>
+                </svg>
+                <p>No has aperturado ningun prestamo todavia.</p>
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamo-apertura.xhtml" styleClass="btn-primary">
+                    Nueva Apertura de Prestamo
+                </h:outputLink>
+            </div>
+        </h:panelGroup>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <p>Banco de Agricultura Salvadoreno SA de CV &#8212; Sistema Interno &#169; 2025</p>
+        </footer>
+
+    </main>
+
+</h:body>
+</html>

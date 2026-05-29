@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Registrar Empleado | BAS</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"/>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-gold: #d48806;
+            --bas-gold-hover: #b77605;
+            --text-main: #1f366a;
+            --text-muted: #6b7280;
+            --line-soft: #d7dde6;
+            --bg-page: #d8dade;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg-page); }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 260px; min-height: 100vh; background: #1a2f5a;
+            position: fixed; left: 0; top: 0;
+            display: flex; flex-direction: column; padding: 0;
+        }
+        .sidebar-brand { padding: 28px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand-name { color: white; font-weight: 800; font-size: 1.1rem; margin: 0; }
+        .brand-role { color: #c8d0dc; font-size: 0.78rem; margin: 2px 0 0; }
+        .nav-section { padding: 20px 12px 8px; }
+        .nav-label {
+            color: #8896a7; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 0 8px; margin-bottom: 4px; display: block;
+        }
+        .nav-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 16px; border-radius: 8px;
+            color: #c8d0dc; text-decoration: none;
+            font-size: 0.9rem; font-weight: 500; margin-bottom: 2px;
+            transition: all 0.15s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(212,136,6,0.18); color: white;
+            border-left: 3px solid #d48806;
+        }
+        .nav-sub-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 16px 9px 32px; border-radius: 8px;
+            color: #a0aab8; text-decoration: none;
+            font-size: 0.85rem; margin-bottom: 2px;
+        }
+        .nav-sub-link:hover { background: rgba(255,255,255,0.06); color: white; }
+        .nav-sub-link.active { background: rgba(212,136,6,0.18); color: white; border-left: 3px solid #d48806; }
+        .sidebar-footer {
+            margin-top: auto; padding: 16px 12px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .user-info { padding: 0 8px 10px; }
+        .user-name { color: white; font-weight: 600; font-size: 0.88rem; }
+        .user-role { color: #8896a7; font-size: 0.75rem; }
+        .logout-link {
+            display: block; padding: 9px 16px; border-radius: 8px;
+            color: #fc8181; text-decoration: none;
+            font-size: 0.85rem; font-weight: 600;
+        }
+        .logout-link:hover { background: rgba(252,129,129,0.12); }
+
+        /* ── Main content ── */
+        .main-content {
+            margin-left: 260px; padding: 28px;
+            background: #d8dade; min-height: 100vh;
+        }
+        .page-header { margin-bottom: 24px; }
+        .page-title  { margin: 0; color: #1a2f5a; font-size: 1.6rem; font-weight: 800; }
+        .page-subtitle { margin: 4px 0 0; color: #6b7280; font-size: 0.9rem; }
+
+        /* ── Card ── */
+        .card {
+            background: white; border-radius: 12px; padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .section-title { margin: 0 0 20px; color: #1a2f5a; font-size: 1.1rem; font-weight: 700; }
+
+        /* ── Form ── */
+        .form-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 16px; margin-bottom: 20px;
+        }
+        .field-group  { display: flex; flex-direction: column; gap: 6px; }
+        .field-label  { font-size: 0.88rem; font-weight: 600; color: #374151; }
+        .input-shell  {
+            display: flex; align-items: center; min-height: 50px;
+            border: 1px solid #d7dde6; border-radius: 10px;
+            background: white; overflow: hidden;
+        }
+        .input-shell:focus-within { border-color: #d48806; box-shadow: 0 0 0 3px rgba(212,136,6,0.12); }
+        .field-input  {
+            width: 100%; min-height: 50px; border: 0; outline: none;
+            padding: 0 14px; font-size: 0.95rem; color: #1f366a;
+            background: transparent; font-family: 'Inter', sans-serif;
+        }
+        .select-shell { border: 1px solid #d7dde6; border-radius: 10px; overflow: hidden; }
+        .select-shell:focus-within { border-color: #d48806; box-shadow: 0 0 0 3px rgba(212,136,6,0.12); }
+        .field-select {
+            width: 100%; min-height: 50px; border: 0; outline: none;
+            padding: 0 14px; font-size: 0.95rem; color: #1f366a;
+            background: white; font-family: 'Inter', sans-serif; cursor: pointer;
+        }
+
+        /* ── Actions ── */
+        .form-actions {
+            display: flex; gap: 12px; align-items: center; padding-top: 8px;
+        }
+        .btn-primary {
+            background: #d48806; color: white; border: 0;
+            border-radius: 10px; padding: 13px 28px;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer;
+            font-family: 'Inter', sans-serif; transition: background 0.15s;
+        }
+        .btn-primary:hover { background: #b77605; }
+        .btn-outline {
+            background: transparent; color: #1a2f5a;
+            border: 2px solid #1a2f5a; border-radius: 10px;
+            padding: 11px 24px; font-size: 0.9rem; font-weight: 600;
+            text-decoration: none; display: inline-block; transition: all 0.15s;
+        }
+        .btn-outline:hover { background: #1a2f5a; color: white; }
+
+        /* ── Alerts ── */
+        .alert-success {
+            background: #d1fae5; color: #065f46;
+            padding: 14px 20px; border-radius: 8px;
+            margin-bottom: 16px; font-weight: 600; font-size: 0.9rem;
+        }
+        .alert-error {
+            background: #fee2e2; color: #991b1b;
+            padding: 14px 20px; border-radius: 8px;
+            margin-bottom: 16px; font-weight: 600; font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid  { grid-template-columns: 1fr; }
+            .main-content { margin-left: 0; }
+            .sidebar { position: relative; width: 100%; min-height: auto; }
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <!-- ══════════════ SIDEBAR ══════════════ -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <p class="brand-name">BAS</p>
+            <p class="brand-role">Banco Agricola Salvadoreño</p>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-label">Principal</span>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/inicio.xhtml"
+                          styleClass="nav-link">
+                &#x1F3E0;&#160; Dashboard
+            </h:outputLink>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-label">Empleados</span>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/registrar.xhtml"
+                          styleClass="nav-sub-link active">
+                &#x2795;&#160; Registrar empleado
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/lista.xhtml"
+                          styleClass="nav-sub-link">
+                &#x1F4CB;&#160; Lista de empleados
+            </h:outputLink>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-label">Préstamos</span>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/prestamos/lista.xhtml"
+                          styleClass="nav-sub-link">
+                &#x1F4C4;&#160; Revisar solicitudes
+            </h:outputLink>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-name">#{sessionScope.username}</div>
+                <div class="user-role">Gerente de Sucursal</div>
+            </div>
+            <h:form>
+                <h:commandLink action="#{navigationBean.logout}" styleClass="logout-link">
+                    &#x1F6AA;&#160; Cerrar sesión
+                </h:commandLink>
+            </h:form>
+        </div>
+    </nav>
+
+    <!-- ══════════════ CONTENIDO PRINCIPAL ══════════════ -->
+    <main class="main-content">
+
+        <div class="page-header">
+            <h1 class="page-title">Registrar Empleado</h1>
+            <p class="page-subtitle">Complete el formulario para agregar un nuevo empleado a la sucursal</p>
+        </div>
+
+        <h:form id="formEmpleado">
+            <div class="card">
+                <h3 class="section-title">Registrar Nuevo Empleado</h3>
+
+                <h:messages globalOnly="true" layout="list" errorClass="alert-error" infoClass="alert-success"/>
+
+                <h:panelGroup layout="block" rendered="#{not empty empleadoBean.mensajeResultado}">
+                    <div class="alert-success">#{empleadoBean.mensajeResultado}</div>
+                </h:panelGroup>
+
+                <div class="form-grid">
+
+                    <!-- Nombre completo -->
+                    <div class="field-group">
+                        <label class="field-label">Nombre Completo *</label>
+                        <div class="input-shell">
+                            <h:inputText value="#{empleadoBean.nombre}" styleClass="field-input"
+                                         pt:placeholder="Nombre y apellidos" pt:required="required"/>
+                        </div>
+                    </div>
+
+                    <!-- Correo -->
+                    <div class="field-group">
+                        <label class="field-label">Correo Electrónico *</label>
+                        <div class="input-shell">
+                            <h:inputText value="#{empleadoBean.correo}" styleClass="field-input"
+                                         pt:placeholder="correo@ejemplo.com" pt:type="email" pt:required="required"/>
+                        </div>
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div class="field-group">
+                        <label class="field-label">Contraseña *</label>
+                        <div class="input-shell">
+                            <h:inputSecret value="#{empleadoBean.clave}" styleClass="field-input"
+                                           pt:placeholder="Contraseña de acceso" pt:required="required"/>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de empleado -->
+                    <div class="field-group">
+                        <label class="field-label">Tipo de Empleado *</label>
+                        <div class="select-shell">
+                            <h:selectOneMenu value="#{empleadoBean.tipoEmpleado}" styleClass="field-select">
+                                <f:selectItem itemValue=""           itemLabel="-- Seleccione tipo --"/>
+                                <f:selectItem itemValue="CAJERO"     itemLabel="Cajero"/>
+                                <f:selectItem itemValue="LIMPIEZA"   itemLabel="Personal de Limpieza"/>
+                                <f:selectItem itemValue="SECRETARIA" itemLabel="Secretaria / Recepcionista"/>
+                                <f:selectItem itemValue="ASESOR_MESA" itemLabel="Asesor Financiero (Mesa)"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <!-- Salario -->
+                    <div class="field-group">
+                        <label class="field-label">Salario ($)</label>
+                        <div class="input-shell">
+                            <h:inputText value="#{empleadoBean.salario}" styleClass="field-input"
+                                         pt:placeholder="0.00" pt:type="number" pt:step="0.01"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <h:commandButton value="Registrar Empleado"
+                                     action="#{empleadoBean.registrarEmpleado}"
+                                     styleClass="btn-primary"/>
+                    <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/lista.xhtml"
+                                  styleClass="btn-outline">Ver Lista</h:outputLink>
+                </div>
+            </div>
+        </h:form>
+
+    </main>
+
+</h:body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <title>Apertura de Prestamo - Banco BAS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-gold: #d48806;
+            --bas-gold-hover: #b77605;
+            --text-main: #1f366a;
+            --text-muted: #6b7280;
+            --line-soft: #d7dde6;
+            --bg-page: #d8dade;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--bas-blue-dark);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 28px 24px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-brand svg {
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand-text span:first-child {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand-text span:last-child {
+            color: var(--bas-gold);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-nav li a {
+            display: block;
+            color: #c8d0dc;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li.active a {
+            color: #ffffff;
+            background: rgba(212, 136, 6, 0.2);
+            border-left-color: var(--bas-gold);
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-user {
+            color: #c8d0dc;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-user strong {
+            display: block;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .logout-link,
+        .logout-link:visited {
+            display: inline-block;
+            color: #f87171;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(248,113,113,0.35);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .logout-link:hover {
+            background: rgba(248,113,113,0.12);
+            color: #fca5a5;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            margin-left: 260px;
+            padding: 28px;
+            background: var(--bg-page);
+            min-height: 100vh;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--line-soft);
+        }
+
+        /* ── STEP INDICATOR ── */
+        .step-badge {
+            display: inline-block;
+            background: var(--bas-blue-dark);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* ── FORM FIELDS ── */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .field-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .input-shell {
+            position: relative;
+        }
+
+        .field-input {
+            width: 100%;
+            min-height: 50px;
+            padding: 12px 16px;
+            border: 1.5px solid var(--line-soft);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background: #fafbff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .field-input:focus {
+            border-color: var(--bas-gold);
+            background: #fff;
+        }
+
+        .field-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ── INFO CARD ── */
+        .info-card {
+            border-top: 4px solid var(--bas-gold);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-item .label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .info-item span:not(.label) {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .highlight {
+            color: var(--bas-gold) !important;
+            font-weight: 700 !important;
+        }
+
+        /* ── RESUMEN CARD ── */
+        .resumen-card {
+            border-top: 4px solid var(--bas-gold);
+        }
+
+        .resumen-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .resumen-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--bas-gold);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .resumen-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .resumen-valor {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* ── BUTTONS ── */
+        .btn-primary {
+            background: var(--bas-gold);
+            color: #ffffff;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-primary:hover {
+            background: var(--bas-gold-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bas-blue-dark);
+            color: #ffffff;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-secondary:hover {
+            background: #1e3a6e;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--bas-blue-dark);
+            border: 2px solid var(--bas-blue-dark);
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--bas-blue-dark);
+            color: #fff;
+        }
+
+        .btn-large {
+            min-width: 260px;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* ── MESSAGES ── */
+        .msg-error {
+            color: #b42318;
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+
+        .msg-warn {
+            color: var(--bas-gold);
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+
+        ul.msg-list {
+            list-style: none;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* ── PAGE FOOTER ── */
+        .page-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line-soft);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px;
+            }
+            .form-grid,
+            .info-grid,
+            .resumen-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn-large {
+                min-width: unset;
+                width: 100%;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="38" height="38" rx="9" fill="#d48806"/>
+                <path d="M7 27h24M19 11v16M10 20h18M13 15l6-4 6 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="sidebar-brand-text">
+                <span>Banco BAS</span>
+                <span>Cajero</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li>
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/inicio.xhtml">
+                    Dashboard
+                </h:outputLink>
+            </li>
+            <li class="active">
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamo-apertura.xhtml">
+                    Apertura Prestamo
+                </h:outputLink>
+            </li>
+            <li>
+                <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamos-lista.xhtml">
+                    Mis Prestamos
+                </h:outputLink>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <strong>#{sessionScope.username}</strong>
+                Cajero
+            </div>
+            <h:form>
+                <h:commandLink action="#{navigationBean.logout}" styleClass="logout-link">
+                    Cerrar sesion
+                </h:commandLink>
+            </h:form>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <div class="page-header">
+            <h1>Apertura de Prestamo</h1>
+            <p>Busca al cliente, revisa sus condiciones y registra la solicitud.</p>
+        </div>
+
+        <!-- ETAPA 1: Buscar Cliente -->
+        <div class="step-badge">Paso 1</div>
+        <h:form id="formBusqueda">
+            <h:panelGroup layout="block" styleClass="card">
+                <h3>Buscar Cliente</h3>
+                <div class="field-group">
+                    <label for="duiInput">DUI del cliente</label>
+                    <div class="input-shell">
+                        <h:inputText id="duiInput"
+                                     value="#{prestamoBean.clienteDui}"
+                                     styleClass="field-input"
+                                     pt:placeholder="00000000-0" />
+                    </div>
+                </div>
+                <h:commandButton value="Buscar Cliente"
+                                 action="#{prestamoBean.buscarCliente}"
+                                 styleClass="btn-primary" />
+                <h:messages globalOnly="false" layout="list" errorClass="msg-error" warnClass="msg-warn" styleClass="msg-list" />
+            </h:panelGroup>
+        </h:form>
+
+        <!-- ETAPA 2: Datos del cliente encontrado -->
+        <h:panelGroup layout="block" rendered="#{prestamoBean.clienteEncontrado != null}">
+            <div class="step-badge">Paso 2</div>
+            <div class="card info-card">
+                <h3>Informacion del Cliente</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Nombre</span>
+                        <span>#{prestamoBean.clienteEncontrado.nombre}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">DUI</span>
+                        <span>#{prestamoBean.clienteEncontrado.dui}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Salario</span>
+                        <span>$#{prestamoBean.clienteEncontrado.salario}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Prestamo maximo</span>
+                        <span class="highlight">$#{prestamoBean.montoMaximo}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Tasa de interes</span>
+                        <span class="highlight">#{prestamoBean.tasaInteres}%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Cuota max. permitida (30% salario)</span>
+                        <span>$#{prestamoBean.clienteEncontrado.salario * 0.30}</span>
+                    </div>
+                </div>
+            </div>
+        </h:panelGroup>
+
+        <!-- ETAPA 3: Formulario del prestamo -->
+        <h:panelGroup layout="block" rendered="#{prestamoBean.clienteEncontrado != null}">
+            <div class="step-badge">Paso 3</div>
+            <h:form id="formPrestamo">
+                <div class="card">
+                    <h3>Datos del Prestamo</h3>
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Monto Solicitado ($)</label>
+                            <div class="input-shell">
+                                <h:inputText value="#{prestamoBean.montoSolicitado}"
+                                             styleClass="field-input"
+                                             pt:placeholder="Ej: 5000" />
+                            </div>
+                            <p class="field-hint">Maximo permitido: $#{prestamoBean.montoMaximo}</p>
+                        </div>
+                        <div class="field-group">
+                            <label>Proposito del prestamo</label>
+                            <div class="input-shell">
+                                <h:inputText value="#{prestamoBean.proposito}"
+                                             styleClass="field-input"
+                                             pt:placeholder="Ej: Compra de vehiculo" />
+                            </div>
+                        </div>
+                    </div>
+                    <h:commandButton value="Calcular Prestamo"
+                                     action="#{prestamoBean.calcularPrestamo}"
+                                     styleClass="btn-secondary" />
+                </div>
+            </h:form>
+        </h:panelGroup>
+
+        <!-- ETAPA 4: Resumen calculado -->
+        <h:panelGroup layout="block" rendered="#{prestamoBean.plazoMeses > 0}">
+            <div class="step-badge">Paso 4 — Confirmacion</div>
+            <h:form id="formConfirmar">
+                <div class="card resumen-card">
+                    <h3>Resumen del Prestamo</h3>
+                    <div class="resumen-grid">
+                        <div class="resumen-item">
+                            <span class="resumen-label">Monto solicitado</span>
+                            <span class="resumen-valor">$<h:outputText value="#{prestamoBean.montoSolicitado}"><f:convertNumber pattern="#,##0.00"/></h:outputText></span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Tasa de interes anual</span>
+                            <span class="resumen-valor">#{prestamoBean.tasaInteres}%</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Cuota mensual</span>
+                            <span class="resumen-valor highlight">$<h:outputText value="#{prestamoBean.cuotaMensual}"><f:convertNumber pattern="#,##0.00"/></h:outputText></span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Plazo</span>
+                            <span class="resumen-valor">#{prestamoBean.plazoMeses} meses (#{prestamoBean.aniosPago} años)</span>
+                        </div>
+                    </div>
+                    <div class="confirm-actions">
+                        <h:commandButton value="Confirmar y Registrar Solicitud"
+                                         action="#{prestamoBean.confirmarApertura}"
+                                         styleClass="btn-primary btn-large" />
+                        <h:commandButton value="Cancelar"
+                                         action="#{prestamoBean.limpiarFormulario}"
+                                         styleClass="btn-outline"
+                                         immediate="true" />
+                    </div>
+                </div>
+            </h:form>
+        </h:panelGroup>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <p>Banco de Agricultura Salvadoreno SA de CV &#8212; Sistema Interno &#169; 2025</p>
+        </footer>
+
+    </main>
+
+</h:body>
+</html>
