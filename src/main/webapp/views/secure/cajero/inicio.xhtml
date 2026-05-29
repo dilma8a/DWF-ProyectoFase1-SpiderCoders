@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:metadata>
+    <f:viewAction action="#{navigationBean.requireLogin}" />
+</f:metadata>
 <h:head>
     <title>Panel del Cajero - Banco BAS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -50,14 +53,9 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .sidebar-brand svg {
-            flex-shrink: 0;
-        }
+        .sidebar-brand svg { flex-shrink: 0; }
 
-        .sidebar-brand-text {
-            display: flex;
-            flex-direction: column;
-        }
+        .sidebar-brand-text { display: flex; flex-direction: column; }
 
         .sidebar-brand-text span:first-child {
             color: #ffffff;
@@ -80,9 +78,7 @@
             list-style: none;
         }
 
-        .sidebar-nav li {
-            margin-bottom: 4px;
-        }
+        .sidebar-nav li { margin-bottom: 4px; }
 
         .sidebar-nav li a,
         .sidebar-nav li .nav-link {
@@ -210,9 +206,7 @@
             border-top: 4px solid var(--bas-blue-dark);
         }
 
-        .metric-card.gold-accent {
-            border-top-color: var(--bas-gold);
-        }
+        .metric-card.gold-accent { border-top-color: var(--bas-gold); }
 
         .metric-card-label {
             color: var(--text-muted);
@@ -239,9 +233,7 @@
             margin-bottom: 4px;
         }
 
-        .metric-card.gold-accent .metric-card-icon {
-            background: rgba(212,136,6,0.12);
-        }
+        .metric-card.gold-accent .metric-card-icon { background: rgba(212,136,6,0.12); }
 
         /* ── STATUS DOT ── */
         .status-online {
@@ -313,9 +305,7 @@
             justify-content: center;
         }
 
-        .quick-card.gold .quick-card-icon {
-            background: rgba(212,136,6,0.12);
-        }
+        .quick-card.gold .quick-card-icon { background: rgba(212,136,6,0.12); }
 
         .quick-card-title {
             font-size: 1rem;
@@ -336,6 +326,233 @@
             font-weight: 700;
         }
 
+        /* ── ATENCION AL CLIENTE ── */
+        .atencion-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 36px;
+        }
+
+        .atencion-card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .dui-search-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 8px;
+            max-width: 480px;
+        }
+
+        .dui-search-row label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .dui-search-row input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--line-soft);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .dui-search-row input:focus { border-color: var(--bas-blue-dark); }
+
+        .btn-primary-bas {
+            background: var(--bas-blue-dark);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-primary-bas:hover { background: #142348; }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 0.82rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .cuentas-table-container { margin-top: 20px; display: none; }
+
+        .cuentas-table-container h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .cuentas-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .cuentas-table thead tr {
+            background: var(--bas-blue-dark);
+            color: #fff;
+        }
+
+        .cuentas-table th {
+            padding: 10px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .cuentas-table tbody tr:nth-child(even) { background: #f6f8fb; }
+
+        .cuentas-table td { padding: 10px 16px; }
+
+        .btn-abono {
+            background: #059669;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-abono:hover { background: #047857; }
+
+        .btn-retiro {
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-retiro:hover { background: #b91c1c; }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .modal-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .modal-box p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .modal-box p strong { color: var(--text-main); }
+
+        .modal-box label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .modal-box input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--line-soft);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            outline: none;
+            margin-bottom: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .modal-box input[type="number"]:focus { border-color: var(--bas-blue-dark); }
+
+        .modal-footer-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: var(--text-main);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover { background: #e5e7eb; }
+
+        .btn-confirm {
+            background: #059669;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-confirm:hover { background: #047857; }
+
         /* ── PAGE FOOTER ── */
         .page-footer {
             margin-top: 40px;
@@ -348,19 +565,9 @@
 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-            }
-            .main-content {
-                margin-left: 0;
-                padding: 20px 16px;
-            }
-            .metrics-row,
-            .quick-access-grid {
-                flex-direction: column;
-            }
+            .sidebar { position: relative; width: 100%; height: auto; }
+            .main-content { margin-left: 0; padding: 20px 16px; }
+            .metrics-row, .quick-access-grid { flex-direction: column; }
         }
     </style>
 </h:head>
@@ -369,7 +576,6 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <!-- Logo SVG del banco -->
             <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="38" height="38" rx="9" fill="#d48806"/>
                 <path d="M7 27h24M19 11v16M10 20h18M13 15l6-4 6 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -432,7 +638,7 @@
                     </svg>
                 </div>
                 <div class="metric-card-label">Modulo Activo</div>
-                <div class="metric-card-value">Apertura de Prestamos</div>
+                <div class="metric-card-value">Atencion al Cliente</div>
             </div>
 
             <div class="metric-card gold-accent">
@@ -451,7 +657,34 @@
             </div>
         </div>
 
-        <!-- Quick Access -->
+        <!-- Atencion al Cliente -->
+        <div class="section-title">Atencion al Cliente</div>
+        <div class="atencion-card">
+            <h2>Buscar Cuentas por DUI</h2>
+            <div class="dui-search-row">
+                <div style="flex:1">
+                    <label for="duiInput">DUI del Cliente</label>
+                    <input type="text" id="duiInput" placeholder="Ej. 12345678-9" />
+                </div>
+                <button class="btn-primary-bas" onclick="buscarCuentas()">Buscar Cuentas</button>
+            </div>
+            <div id="errorMsg" class="error-msg"></div>
+
+            <div id="tablaCuentasContainer" class="cuentas-table-container">
+                <h3>Cuentas Asociadas</h3>
+                <table class="cuentas-table">
+                    <thead>
+                        <tr>
+                            <th>Numero de Cuenta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCuentasBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Accesos Rapidos -->
         <div class="section-title">Accesos Rapidos</div>
         <div class="quick-access-grid">
             <h:outputLink value="#{request.contextPath}/views/secure/cajero/prestamo-apertura.xhtml" styleClass="quick-card">
@@ -483,6 +716,121 @@
         </footer>
 
     </main>
+
+    <!-- Modal Transaccion -->
+    <div id="transaccionModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="modalTitle">Transaccion</h3>
+            <input type="hidden" id="tipoTransaccion" />
+            <input type="hidden" id="cuentaSeleccionada" />
+            <p><strong>Cuenta:</strong> <span id="lblCuenta"></span></p>
+            <label for="montoInput">Monto ($)</label>
+            <input type="number" id="montoInput" min="0.01" step="0.01" placeholder="0.00" />
+            <div id="modalError" class="error-msg"></div>
+            <div class="modal-footer-btns">
+                <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-confirm" onclick="procesarTransaccion()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Persona 4: Proporcionar la URL base y el puerto exacto donde levantara el servicio REST.
+        const API_BASE_URL = "http://localhost:8080/api";
+
+        async function buscarCuentas() {
+            const dui = document.getElementById("duiInput").value.trim();
+            const errorMsg = document.getElementById("errorMsg");
+
+            if (!dui) {
+                errorMsg.innerText = "Por favor, ingrese un DUI valido.";
+                errorMsg.style.display = "block";
+                return;
+            }
+            errorMsg.style.display = "none";
+
+            try {
+                // Persona 4: habilitar endpoint GET "/cuentas/{dui}" que retorne JSON.
+                const response = await fetch(`${API_BASE_URL}/cuentas/${dui}`);
+                if (!response.ok) throw new Error("Cliente no encontrado o sin cuentas");
+                const cuentas = await response.json();
+                mostrarTabla(cuentas);
+            } catch (error) {
+                alert("Error al buscar: " + error.message);
+                document.getElementById("tablaCuentasContainer").style.display = "none";
+            }
+        }
+
+        function mostrarTabla(cuentas) {
+            const tbody = document.getElementById("tablaCuentasBody");
+            tbody.innerHTML = "";
+            cuentas.forEach((cuenta) => {
+                const numero = cuenta.numeroCuenta || cuenta;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${numero}</td>
+                    <td>
+                        <button class="btn-abono" onclick="abrirModal('abono', '${numero}')">Abonar</button>
+                        <button class="btn-retiro" onclick="abrirModal('retiro', '${numero}')">Retirar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById("tablaCuentasContainer").style.display = "block";
+        }
+
+        function abrirModal(tipo, numeroCuenta) {
+            document.getElementById("tipoTransaccion").value = tipo;
+            document.getElementById("cuentaSeleccionada").value = numeroCuenta;
+            document.getElementById("lblCuenta").innerText = numeroCuenta;
+            document.getElementById("montoInput").value = "";
+            document.getElementById("modalError").style.display = "none";
+            document.getElementById("modalTitle").innerText = tipo === "abono" ? "Abonar Efectivo" : "Retirar Efectivo";
+            document.getElementById("transaccionModal").classList.add("open");
+        }
+
+        function cerrarModal() {
+            document.getElementById("transaccionModal").classList.remove("open");
+        }
+
+        async function procesarTransaccion() {
+            const tipo = document.getElementById("tipoTransaccion").value;
+            const cuenta = document.getElementById("cuentaSeleccionada").value;
+            const monto = parseFloat(document.getElementById("montoInput").value);
+            const modalError = document.getElementById("modalError");
+
+            if (isNaN(monto) || monto <= 0) {
+                modalError.innerText = "El monto debe ser un numero mayor a cero.";
+                modalError.style.display = "block";
+                return;
+            }
+            modalError.style.display = "none";
+
+            // Persona 3: si se requiere autorizacion del Gerente para transacciones altas, conectar aqui.
+            const endpoint = tipo === "abono" ? "/abonarefectivo" : "/retirarefectivo";
+            const bodyData = { cuenta };
+            if (tipo === "abono") { bodyData.abono = monto; } else { bodyData.monto = monto; }
+
+            try {
+                // Persona 4: asegurar que los endpoints POST reciban el JSON y procesen en MySQL.
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(bodyData),
+                });
+                if (!response.ok) throw new Error("Fallo en la transaccion. Verifique los datos o el saldo.");
+                alert(`Transaccion exitosa: ${tipo.toUpperCase()} de $${monto} en la cuenta ${cuenta}.`);
+                cerrarModal();
+            } catch (error) {
+                alert("Error al procesar la transaccion: " + error.message);
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera del cuadro
+        document.getElementById("transaccionModal").addEventListener("click", function(e) {
+            if (e.target === this) cerrarModal();
+        });
+    </script>
 
 </h:body>
 </html>
