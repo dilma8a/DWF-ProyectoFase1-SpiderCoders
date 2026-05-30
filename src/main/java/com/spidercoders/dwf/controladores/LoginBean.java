@@ -71,7 +71,7 @@ public class LoginBean {
 
         switch (role) {
             case "GERENTE_GENERAL":
-                return "/views/secure/gerente-general/inicio.xhtml";
+                return "/views/secure/gerente-general/dashboard.xhtml";
             case "GERENTE_SUCURSAL":
                 return "/views/secure/gerente-sucursal/inicio.xhtml";
             case "DEPENDIENTE":

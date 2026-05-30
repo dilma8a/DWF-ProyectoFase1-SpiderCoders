@@ -26,7 +26,7 @@ public class NavigationBean {
 
         switch (String.valueOf(roleValue)) {
             case "GERENTE_GENERAL":
-                return "/views/secure/gerente-general/inicio.xhtml?faces-redirect=true";
+                return "/views/secure/gerente-general/dashboard.xhtml?faces-redirect=true";
             case "GERENTE_SUCURSAL":
                 return "/views/secure/gerente-sucursal/inicio.xhtml?faces-redirect=true";
             case "DEPENDIENTE":
@@ -47,7 +47,27 @@ public class NavigationBean {
     }
 
     public String gerenteGeneral() {
-        return rolePage("GERENTE_GENERAL", "/views/secure/gerente-general/inicio.xhtml");
+        return rolePage("GERENTE_GENERAL", "/views/secure/gerente-general/dashboard.xhtml");
+    }
+
+    public String gerenteGeneralDashboard() {
+        return gerenteGeneral();
+    }
+
+    public String sucursales() {
+        return rolePage("GERENTE_GENERAL", "/views/secure/gerente-general/nueva-sucursal.xhtml");
+    }
+
+    public String movimientos() {
+        return rolePage("GERENTE_GENERAL", "/views/secure/gerente-general/movimientos-recientes.xhtml");
+    }
+
+    public String accionesPersonal() {
+        return rolePage("GERENTE_GENERAL", "/views/secure/gerente-general/acciones-personal.xhtml");
+    }
+
+    public String reportes() {
+        return rolePage("GERENTE_GENERAL", "/views/secure/gerente-general/reportes.xhtml");
     }
 
     public String gerenteSucursal() {

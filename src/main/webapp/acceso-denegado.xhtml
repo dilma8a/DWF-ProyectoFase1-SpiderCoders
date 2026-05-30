@@ -2,15 +2,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
-    <title>Acceso denegado</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acceso denegado - Banco de Agricultura Salvadoreño</title>
+    <h:outputStylesheet library="css" name="bas-auth.css" />
 </h:head>
 <h:body>
-    <h1>Acceso denegado</h1>
-    <p>Tu usuario no tiene permisos para ver esta ruta.</p>
-    <h:form>
-        <p><h:commandLink action="#{navigationBean.portal}" value="Ir a mi portal" /></p>
-        <p><h:commandLink action="#{navigationBean.logout}" value="Cerrar sesion" /></p>
-    </h:form>
+    <main class="auth-shell">
+        <section class="auth-hero">
+            <div class="auth-brand">
+                <svg class="auth-mark" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M19 22 C10 18 6 10 10 4 C14 10 18 16 19 22Z" fill="#d0d4e0" />
+                    <path d="M19 22 C28 18 32 10 28 4 C24 10 20 16 19 22Z" fill="#d18b12" />
+                    <path d="M19 4 C17 2 14 2 14 5 C14 8 19 12 19 12 C19 12 24 8 24 5 C24 2 21 2 19 4Z" fill="#f4c45b" />
+                    <rect x="17.5" y="22" width="3" height="20" rx="1.5" fill="#d18b12" />
+                    <circle cx="19" cy="44" r="3.5" fill="#d18b12" />
+                </svg>
+                <div class="auth-brand-copy">
+                    <h1>Banco de Agricultura Salvadoreño</h1>
+                    <p>Tu usuario no tiene permisos para acceder a esta ruta protegida.</p>
+                </div>
+            </div>
+
+            <div class="auth-badges">
+                <span class="auth-badge">Acceso restringido</span>
+                <span class="auth-badge">Sesión activa</span>
+            </div>
+        </section>
+
+        <section class="auth-panel">
+            <article class="auth-card">
+                <h2 class="auth-title">Acceso denegado</h2>
+                <p class="auth-subtitle">No cuentas con permisos para ver esta página.</p>
+
+                <p class="auth-note">Si crees que esto es un error, vuelve a tu portal principal o cierra sesión y entra con el usuario correcto.</p>
+
+                <h:form styleClass="button-row" prependId="false">
+                    <h:commandLink action="#{navigationBean.portal}" styleClass="auth-button portal-link" value="Ir a mi portal" />
+                    <h:commandLink action="#{navigationBean.logout}" styleClass="secondary-button portal-link" value="Cerrar sesión" />
+                </h:form>
+            </article>
+        </section>
+    </main>
 </h:body>
 </html>
 

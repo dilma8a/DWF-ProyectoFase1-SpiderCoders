@@ -9,6 +9,16 @@ import com.spidercoders.dwf.utilidades.JPAUtil;
 
 public class ClienteDao {
 
+    public Long contarActivos() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(c) FROM Cliente c WHERE c.estado = 1", Long.class)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
     public Cliente buscarPorDui(String dui) {
         EntityManager em = JPAUtil.getEntityManager();
         try {

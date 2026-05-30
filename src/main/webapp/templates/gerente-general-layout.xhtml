@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><ui:insert name="pageTitle">Gerente General</ui:insert></title>
+    <h:outputStylesheet library="css" name="bas-secure-v3.css" />
+</h:head>
+<h:body>
+    <div class="gg-shell">
+        <div class="gg-topbar">
+            <div class="gg-brand">
+                <span class="gg-brand-mark" aria-hidden="true">B</span>
+                <div class="gg-brand-copy">
+                    <span class="gg-brand-title">Banco de Agricultura Salvadoreño</span>
+                </div>
+            </div>
+
+            <div class="gg-userbox">
+                <div class="gg-user">
+                    <span class="gg-user-name">#{empty sessionScope.username ? 'gerentegeneral' : sessionScope.username}</span>
+                    <span class="gg-user-role">#{sessionScope.role eq 'GERENTE_GENERAL' ? 'Gerente General' : sessionScope.role}</span>
+                </div>
+                <h:form styleClass="gg-logout-form">
+                    <h:commandLink action="#{navigationBean.logout}" value="Salir" styleClass="gg-logout" />
+                </h:form>
+            </div>
+        </div>
+
+        <div class="gg-body">
+            <aside class="gg-sidebar">
+                <h:link outcome="/views/secure/gerente-general/dashboard.xhtml"
+                        styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/dashboard.xhtml' ? 'gg-nav-item active' : 'gg-nav-item'}">
+                    <span class="gg-nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </h:link>
+
+                <h:link outcome="/views/secure/gerente-general/nueva-sucursal.xhtml"
+                        styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/nueva-sucursal.xhtml' ? 'gg-nav-item active' : 'gg-nav-item'}">
+                    <span class="gg-nav-icon">📍</span>
+                    <span>Sucursales</span>
+                </h:link>
+
+                <h:link outcome="/views/secure/gerente-general/movimientos-recientes.xhtml"
+                        styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/movimientos-recientes.xhtml' ? 'gg-nav-item active' : 'gg-nav-item'}">
+                    <span class="gg-nav-icon">📊</span>
+                    <span>Movimientos</span>
+                </h:link>
+
+                <h:link outcome="/views/secure/gerente-general/acciones-personal.xhtml"
+                        styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/acciones-personal.xhtml' ? 'gg-nav-item active' : 'gg-nav-item'}">
+                    <span class="gg-nav-icon">🔄</span>
+                    <span>Acciones de personal</span>
+                </h:link>
+
+                <h:link outcome="/views/secure/gerente-general/reportes.xhtml"
+                        styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/reportes.xhtml' ? 'gg-nav-item active' : 'gg-nav-item'}">
+                    <span class="gg-nav-icon">📈</span>
+                    <span>Reportes</span>
+                </h:link>
+            </aside>
+
+            <main class="gg-content">
+                <ui:insert name="content" />
+            </main>
+        </div>
+    </div>
+</h:body>
+</html>

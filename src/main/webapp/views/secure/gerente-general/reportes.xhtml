@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/gerente-general-layout-v2.xhtml">
+    <ui:define name="pageTitle">Reportes</ui:define>
+    <ui:define name="content">
+        <h1 class="page-title">Reportes</h1>
+        <p class="page-subtitle">Punto de entrada para analiticas y seguimiento general del banco.</p>
+
+        <div class="dashboard-grid">
+            <div class="stat-card"><span class="stat-label">Sucursales activas</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalSucursalesActivas}</span></div>
+            <div class="stat-card"><span class="stat-label">Movimientos registrados</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalMovimientos}</span></div>
+            <div class="stat-card"><span class="stat-label">Acciones pendientes</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalAccionesPendientes}</span></div>
+            <div class="stat-card"><span class="stat-label">Empleados activos</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalEmpleadosActivos}</span></div>
+            <div class="stat-card"><span class="stat-label">Clientes registrados</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalClientes}</span></div>
+        </div>
+
+        <section class="panel">
+            <div class="panel-header">Observacion</div>
+            <div class="panel-body mini-note">
+                La guia de la fase 1 solo exige el menu Reportes como acceso visual. Esta pantalla conserva el layout JSF del gerente general y reutiliza los indicadores reales de la base de datos.
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>
