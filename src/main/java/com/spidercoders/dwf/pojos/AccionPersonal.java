@@ -2,6 +2,7 @@ package com.spidercoders.dwf.pojos;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -42,8 +45,11 @@ public class AccionPersonal {
     private Date fechaSolicitud;
 
     @Column(name = "fecha_resolucion")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaResolucion;
+    private LocalDateTime fechaResolucion;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_gerente_general")
+    private Empleado gerenteGeneral;
 
     public Integer getIdAccion() {
         return idAccion;
@@ -101,11 +107,19 @@ public class AccionPersonal {
         this.fechaSolicitud = fechaSolicitud;
     }
 
-    public Date getFechaResolucion() {
+    public LocalDateTime getFechaResolucion() {
         return fechaResolucion;
     }
 
-    public void setFechaResolucion(Date fechaResolucion) {
+    public void setFechaResolucion(LocalDateTime fechaResolucion) {
         this.fechaResolucion = fechaResolucion;
+    }
+    
+    public Empleado getGerenteGeneral() {
+        return gerenteGeneral;
+    }
+    
+    public void setGerenteGeneral(Empleado gerenteGeneral) {
+        this.gerenteGeneral = gerenteGeneral;
     }
 }

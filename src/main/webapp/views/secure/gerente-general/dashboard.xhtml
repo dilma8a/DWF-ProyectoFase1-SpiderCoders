@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banco de Agricultura Salvadoreño - Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { min-height: 100%; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f8;
+            color: #1f2f63;
+        }
+
+        .topbar {
+            background-color: #1a2757;
+            color: #fff;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 24px;
+            gap: 16px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+            min-width: 0;
+        }
+
+        .topbar-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #c8962a;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 800;
+            flex: 0 0 auto;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .user-meta {
+            text-align: right;
+            font-size: 0.84rem;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .user-meta span {
+            display: block;
+            opacity: 0.84;
+            font-size: 0.75rem;
+        }
+
+        .logout-form { margin: 0; }
+
+        .logout-link {
+            border: 0;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-radius: 8px;
+            padding: 9px 14px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-layout {
+            min-height: calc(100vh - 64px);
+            display: flex;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.06);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: #5a6077;
+            font-size: 0.9rem;
+            text-decoration: none;
+            line-height: 1.1;
+            transition: background 0.2s;
+        }
+
+        .nav-item:hover { background: #f0f2f8; }
+
+        .nav-item.active {
+            margin: 0 6px;
+            padding-left: 14px;
+            border-radius: 6px;
+            background: #3b4bb5;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+            flex: 0 0 auto;
+        }
+
+        .content {
+            flex: 1;
+            padding: 28px 24px;
+            overflow-y: auto;
+            min-width: 0;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #1f2f63;
+        }
+
+        .subtitle {
+            color: #5d6e92;
+            font-size: 1rem;
+            margin-bottom: 18px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid #dfe4ef;
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .stat-label {
+            display: block;
+            color: #6f7e9c;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            display: block;
+            margin-top: 8px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1c2f5f;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e6e9f3;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .card-title {
+            margin: 0;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eceff7;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #2f3550;
+        }
+
+        .card-body { padding: 14px 16px; }
+
+        .table-wrap { overflow-x: auto; }
+
+        .bank-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            min-width: 560px;
+        }
+
+        .bank-table th {
+            text-align: left;
+            padding: 10px 12px;
+            color: #5d637c;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-bottom: 1px solid #e9ecf5;
+            background: #fafbff;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .bank-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf0f8;
+            color: #323a55;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .bank-table tr:last-child td { border-bottom: none; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 92px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .badge-success { background: #e0f5eb; color: #1a8a4a; border: 1px solid #b0e0c8; }
+        .badge-danger { background: #fde8e0; color: #c04010; border: 1px solid #f5c0a8; }
+        .badge-warning { background: #f8ebd2; color: #a97116; border: 1px solid #f1d8a8; }
+        .badge-neutral { background: #e8edff; color: #3b4bb5; border: 1px solid #ccd6ff; }
+
+        .empty {
+            margin-top: 10px;
+            font-size: 0.88rem;
+            color: #6b7280;
+        }
+
+        @media (max-width: 1024px) {
+            .title { font-size: 1.8rem; }
+        }
+
+        @media (max-width: 900px) {
+            .app-layout { display: block; }
+            .sidebar { width: 100%; }
+            .content { padding: 18px; }
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-mark">B</span>
+            <div>Banco de Agricultura Salvadoreño</div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-meta">
+                #{empty sessionScope.username ? 'gerentegeneral' : sessionScope.username}
+                <span>Gerente General</span>
+            </div>
+            <h:form styleClass="logout-form">
+                <h:commandLink action="#{navigationBean.logout}" value="Salir" styleClass="logout-link" />
+            </h:form>
+        </div>
+    </div>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <h:link outcome="/views/secure/gerente-general/dashboard.xhtml" styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/dashboard.xhtml' ? 'nav-item active' : 'nav-item'}">
+                <span class="nav-icon">🏠</span><span>Dashboard</span>
+            </h:link>
+            <h:link outcome="/views/secure/gerente-general/nueva-sucursal.xhtml" styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/nueva-sucursal.xhtml' ? 'nav-item active' : 'nav-item'}">
+                <span class="nav-icon">📍</span><span>Sucursales</span>
+            </h:link>
+            <h:link outcome="/views/secure/gerente-general/movimientos-recientes.xhtml" styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/movimientos-recientes.xhtml' ? 'nav-item active' : 'nav-item'}">
+                <span class="nav-icon">📊</span><span>Movimientos</span>
+            </h:link>
+            <h:link outcome="/views/secure/gerente-general/acciones-personal.xhtml" styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/acciones-personal.xhtml' ? 'nav-item active' : 'nav-item'}">
+                <span class="nav-icon">🔄</span><span>Acciones de personal</span>
+            </h:link>
+            <h:link outcome="/views/secure/gerente-general/reportes.xhtml" styleClass="#{facesContext.viewRoot.viewId eq '/views/secure/gerente-general/reportes.xhtml' ? 'nav-item active' : 'nav-item'}">
+                <span class="nav-icon">📈</span><span>Reportes</span>
+            </h:link>
+        </aside>
+
+        <main class="content">
+            <h1 class="title">Dashboard del Gerente General</h1>
+            <p class="subtitle">Resumen general del banco y accesos principales del módulo.</p>
+
+            <section class="stats">
+                <div class="stat"><span class="stat-label">Sucursales activas</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalSucursalesActivas}</span></div>
+                <div class="stat"><span class="stat-label">Movimientos registrados</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalMovimientos}</span></div>
+                <div class="stat"><span class="stat-label">Acciones pendientes</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalAccionesPendientes}</span></div>
+                <div class="stat"><span class="stat-label">Empleados activos</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalEmpleadosActivos}</span></div>
+                <div class="stat"><span class="stat-label">Clientes registrados</span><span class="stat-value">#{gerenteGeneralDashboardBean.totalClientes}</span></div>
+            </section>
+
+            <section class="grid">
+                <div class="card">
+                    <h2 class="card-title">Movimientos recientes</h2>
+                    <div class="card-body">
+                        <div class="table-wrap">
+                            <h:dataTable value="#{gerenteGeneralDashboardBean.movimientosRecientes}" var="movimiento" styleClass="bank-table">
+                                <h:column><f:facet name="header">Cuenta</f:facet><h:outputText value="#{movimiento.cuenta.numeroCuenta}" /></h:column>
+                                <h:column><f:facet name="header">Tipo</f:facet><span class="badge #{movimiento.tipoMovimiento eq 'Retiro' ? 'badge-danger' : movimiento.tipoMovimiento eq 'Deposito' ? 'badge-success' : 'badge-neutral'}"><h:outputText value="#{movimiento.tipoMovimiento}" /></span></h:column>
+                                <h:column><f:facet name="header">Monto</f:facet><h:outputText value="#{movimiento.monto}"><f:convertNumber pattern="$#,##0.00" /></h:outputText></h:column>
+                                <h:column><f:facet name="header">Sucursal</f:facet><h:outputText value="#{movimiento.cuenta.sucursal.nombre}" /></h:column>
+                                <h:column><f:facet name="header">Fecha</f:facet><h:outputText value="#{movimiento.fechaMovimientoTexto}" /></h:column>
+                            </h:dataTable>
+                        </div>
+                        <h:panelGroup rendered="#{empty gerenteGeneralDashboardBean.movimientosRecientes}" layout="block" styleClass="empty">No hay movimientos recientes para mostrar.</h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Acciones de personal pendientes</h2>
+                    <div class="card-body">
+                        <div class="table-wrap">
+                            <h:dataTable value="#{gerenteGeneralDashboardBean.accionesPendientes}" var="accion" styleClass="bank-table">
+                                <h:column><f:facet name="header">Empleado</f:facet><h:outputText value="#{accion.empleado.nombreCompleto}" /></h:column>
+                                <h:column><f:facet name="header">Accion</f:facet><span class="badge badge-warning"><h:outputText value="#{accion.tipoAccion}" /></span></h:column>
+                                <h:column><f:facet name="header">Solicita</f:facet><h:outputText value="#{accion.gerenteSucursal.nombreCompleto}" /></h:column>
+                                <h:column><f:facet name="header">Estado</f:facet><span class="badge badge-warning"><h:outputText value="#{accion.estado}" /></span></h:column>
+                            </h:dataTable>
+                        </div>
+                        <h:panelGroup rendered="#{empty gerenteGeneralDashboardBean.accionesPendientes}" layout="block" styleClass="empty">No hay acciones pendientes.</h:panelGroup>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</h:body>
+</html>

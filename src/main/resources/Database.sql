@@ -112,4 +112,3 @@ INSERT INTO clientes_info (nombre, dui, salario, telefono, direccion) VALUES
 ('María Luisa García', '98765432-1', 450.00, '7234-5678', 'Col. Jardines, Santa Ana'),
 ('Carlos Eduardo López', '55544433-2', 750.00, '7345-6789', 'Res. Miraflores, San Miguel'),
 ('Ana Patricia Martínez', '11122233-4', 1200.00, '7456-7890', 'Col. San Benito, San Salvador');
-

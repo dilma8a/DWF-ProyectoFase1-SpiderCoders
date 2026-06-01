@@ -2,6 +2,7 @@ package com.spidercoders.dwf.servicios.impl;
 
 import com.spidercoders.dwf.dao.EmpleadoDao;
 import com.spidercoders.dwf.pojos.Empleado;
+import com.spidercoders.dwf.pojos.Usuario;
 import com.spidercoders.dwf.servicios.EmpleadoService;
 
 import java.util.List;
@@ -37,5 +38,30 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public void update(Empleado empleado) {
         empleadoDao.update(empleado);
+    }
+    
+    @Override
+    public Long contarEmpleadosActivos() {
+        return empleadoDao.contarActivos();
+    }
+
+    @Override
+    public List<Empleado> listarGerentesDisponibles() {
+        return empleadoDao.listarGerentesDisponibles();
+    }
+
+    @Override
+    public Empleado buscarPorUsuario(Usuario usuario) {
+        return empleadoDao.buscarPorUsuario(usuario);
+    }
+
+    @Override
+    public Empleado buscarPorId(Integer idEmpleado) {
+        return empleadoDao.buscarPorId(idEmpleado);
+    }
+
+    @Override
+    public void actualizar(Empleado empleado) {
+        empleadoDao.actualizar(empleado);
     }
 }

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      lang="es">
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - Banco de Agricultura Salvadoreño</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-blue-primary: #25407a;
+            --bas-gold: #d48806;
+            --text-main: #1f366a;
+            --line-soft: #d7dde6;
+            --bg-page: #e1e5eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+        }
+
+        .page-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .register-shell {
+            width: min(1180px, 100%);
+            min-height: 760px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14);
+            background: #fff;
+        }
+
+        .left-panel {
+            background: var(--bas-blue-dark);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+            padding: 42px 28px;
+        }
+
+        .logo-mark {
+            width: 90px;
+            height: 90px;
+            border-radius: 0;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 22C12 22 12 18 12 14' stroke='%23d48806' stroke-linecap='round' stroke-width='2'/%3E%3Cpath d='M12 14C10 12 7 11 7 8C7 5 9 4 11 4C11 4 11.5 6 12 7C12.5 6 13 4 13 4C15 4 17 5 17 8C17 11 14 12 12 14Z' fill='%23d48806'/%3E%3Cpath d='M12 10C10 8.5 8 7.5 8 5.5C8 3.5 9.5 3 11 3C11 3 11.5 4.5 12 5.5C12.5 4.5 13 3 13 3C14.5 3 16 3.5 16 5.5C16 7.5 14 8.5 12 10Z' fill='%23ffffff' fill-opacity='0.8'/%3E%3Cpath d='M12 18C10.5 17 9 16 9 14.5C9 13 10 12.5 11 12.5C11 12.5 11.5 13.5 12 14C12.5 13.5 13 12.5 13 12.5C14 12.5 15 13 15 14.5C15 16 13.5 17 12 18Z' fill='%23ffffff' fill-opacity='0.6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        .bank-name {
+            margin: 0;
+            max-width: 360px;
+            font-size: clamp(2rem, 3vw, 3rem);
+            line-height: 1.1;
+        }
+
+        .right-panel {
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+
+        .form-card {
+            width: min(620px, 100%);
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #eef2f7;
+            padding: 28px;
+            box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 2rem;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .messages {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 0.88rem;
+            list-style: none;
+        }
+        .field-message {
+            color: #b91c1c;
+            font-size: 0.85rem;
+            margin-top: 2px;
+            margin-bottom: 0;
+            padding-left: 2px;
+            min-height: 18px;
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .field {
+            display: grid;
+            gap: 5px;
+        }
+
+        .field.full {
+            grid-column: span 2;
+        }
+
+        .field label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .input {
+            width: 100%;
+            min-height: 46px;
+            border: 1px solid var(--line-soft);
+            border-radius: 10px;
+            padding: 0 12px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .input:focus {
+            border-color: var(--bas-blue-primary);
+            box-shadow: 0 0 0 3px rgba(37, 64, 122, 0.12);
+        }
+
+        .terms {
+            margin-top: 4px;
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4b5563;
+            font-size: 0.88rem;
+        }
+
+        .submit {
+            grid-column: span 2;
+            min-height: 50px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--bas-blue-primary);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .submit:hover {
+            background: var(--bas-blue-dark);
+        }
+
+        .footer {
+            margin-top: 14px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--bas-blue-primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 960px) {
+            .register-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                padding: 32px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full,
+            .terms,
+            .submit {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="page-shell">
+        <section class="register-shell">
+            <aside class="left-panel">
+                <div class="logo-mark" aria-label="Logo Banco de Agricultura Salvadoreño"></div>
+                <h1 class="bank-name">Banco de Agricultura Salvadoreño</h1>
+            </aside>
+
+            <section class="right-panel">
+                <div class="form-card">
+
+                    <div class="header">
+                        <h2>Registrate</h2>
+                        <p>Crea tu cuenta ingresando todos los datos</p>
+                    </div>
+
+                    <h:form id="registroForm" prependId="false" styleClass="form-grid">
+
+
+
+                        <div class="field">
+                            <label for="nombres">Nombres</label>
+                            <h:inputText id="nombres" value="#{registroBean.nombres}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese sus nombres"
+                                         pt:placeholder="Nombres" />
+                            <h:message for="nombres" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="apellidos">Apellidos</label>
+                            <h:inputText id="apellidos" value="#{registroBean.apellidos}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese sus apellidos"
+                                         pt:placeholder="Apellidos" />
+                            <h:message for="apellidos" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="correo">Email</label>
+                            <h:inputText id="correo" value="#{registroBean.correo}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese su correo"
+                                         pt:type="email" pt:placeholder="Email" />
+                            <h:message for="correo" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="usuario">Usuario</label>
+                            <h:inputText id="usuario" value="#{registroBean.usuario}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese su nombre de usuario"
+                                         pt:placeholder="Usuario" />
+                            <h:message for="usuario" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="dui">DUI</label>
+                            <h:inputText id="dui" value="#{registroBean.dui}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese su DUI"
+                                         pt:placeholder="00000000-0" />
+                            <h:message for="dui" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="telefono">Telefono</label>
+                            <h:inputText id="telefono" value="#{registroBean.telefono}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese su telefono"
+                                         pt:placeholder="Telefono" />
+                            <h:message for="telefono" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="salario">Salario</label>
+                            <h:inputText id="salario" value="#{registroBean.salario}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese su salario"
+                                         pt:type="number" pt:step="0.01" pt:placeholder="Salario" />
+                            <h:message for="salario" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field full">
+                            <label for="direccion">Direccion</label>
+                            <h:inputText id="direccion" value="#{registroBean.direccion}" styleClass="input"
+                                         required="true" requiredMessage="Ingrese su direccion"
+                                         pt:placeholder="Direccion" />
+                            <h:message for="direccion" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="clave">Contrasena</label>
+                            <h:inputSecret id="clave" value="#{registroBean.clave}" redisplay="true" styleClass="input"
+                                           required="true" requiredMessage="Ingrese su contrasena"
+                                           pt:placeholder="Contrasena" />
+                            <h:message for="clave" styleClass="field-message" />
+                        </div>
+
+
+                        <div class="field">
+                            <label for="confirmarClave">Confirmar Contrasena</label>
+                            <h:inputSecret id="confirmarClave" value="#{registroBean.confirmarClave}" redisplay="true" styleClass="input"
+                                           required="true" requiredMessage="Confirme su contrasena"
+                                           pt:placeholder="Confirmar Contrasena" />
+                            <h:message for="confirmarClave" styleClass="field-message" />
+                        </div>
+
+                        <div class="terms">
+                            <h:selectBooleanCheckbox id="aceptaTerminos" value="#{registroBean.aceptaTerminos}" />
+                            <h:outputLabel for="aceptaTerminos" value="Acepto los Terminos y Condiciones" />
+                        </div>
+
+                        <h:commandButton value="Crear Cuenta" action="#{registroBean.registrar}" styleClass="submit" />
+                    </h:form>
+
+                    <div class="footer">
+                        Ya tienes cuenta?
+                        <h:link outcome="login" value="Inicia sesion" />
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+</h:body>
+</html>

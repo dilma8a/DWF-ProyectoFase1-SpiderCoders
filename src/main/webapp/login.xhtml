@@ -338,7 +338,7 @@
                         </h:panelGroup>
 
                         <div class="forgot-row">
-                            <h:outputLink value="#" styleClass="forgot-link">¿Olvidaste tu contraseña?</h:outputLink>
+                            <h:link outcome="olvidodeclave" styleClass="forgot-link">¿Olvidaste tu contraseña?</h:link>
                         </div>
 
                         <h:commandButton value="Ingresar" action="#{loginBean.login}" styleClass="submit-button" />
@@ -346,7 +346,7 @@
                         <div class="register-row">
                             ¿No tienes cuenta?
                             <br />
-                            <h:outputLink value="#" styleClass="register-link">Registrate</h:outputLink>
+                            <h:link outcome="registrate" styleClass="register-link">Registrate</h:link>
                         </div>
                     </h:form>
                 </div>
