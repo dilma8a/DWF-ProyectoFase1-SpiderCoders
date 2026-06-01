@@ -14,6 +14,7 @@ import com.spidercoders.dwf.servicios.AccionPersonalService;
 import com.spidercoders.dwf.servicios.EmpleadoService;
 import com.spidercoders.dwf.servicios.MovimientoService;
 import com.spidercoders.dwf.servicios.SucursalService;
+import com.spidercoders.dwf.servicios.impl.EmpleadoServiceImpl;
 
 @ManagedBean(name = "gerenteGeneralDashboardBean")
 @ViewScoped
@@ -32,7 +33,7 @@ public class GerenteGeneralDashboardBean implements Serializable {
     private final SucursalService sucursalService = new SucursalService();
     private final MovimientoService movimientoService = new MovimientoService();
     private final AccionPersonalService accionPersonalService = new AccionPersonalService();
-    private final EmpleadoService empleadoService = new EmpleadoService();
+    private final EmpleadoService empleadoService = new EmpleadoServiceImpl();
     private final ClienteDao clienteDao = new ClienteDao();
 
     @PostConstruct

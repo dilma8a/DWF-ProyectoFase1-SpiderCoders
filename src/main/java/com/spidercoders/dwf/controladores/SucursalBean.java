@@ -13,6 +13,7 @@ import com.spidercoders.dwf.pojos.Empleado;
 import com.spidercoders.dwf.pojos.Sucursal;
 import com.spidercoders.dwf.servicios.EmpleadoService;
 import com.spidercoders.dwf.servicios.SucursalService;
+import com.spidercoders.dwf.servicios.impl.EmpleadoServiceImpl;
 
 @ManagedBean(name = "sucursalBean")
 @ViewScoped
@@ -26,7 +27,7 @@ public class SucursalBean implements Serializable {
     private Integer idGerenteSeleccionado;
 
     private final SucursalService sucursalService = new SucursalService();
-    private final EmpleadoService empleadoService = new EmpleadoService();
+    private final EmpleadoService empleadoService = new EmpleadoServiceImpl();
 
     @PostConstruct
     public void init() {

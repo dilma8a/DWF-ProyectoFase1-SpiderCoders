@@ -1,9 +1,5 @@
 package com.spidercoders.dwf.pojos;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,42 +9,47 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "acciones_personal")
-public class AccionPersonal implements Serializable {
+public class AccionPersonal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_accion")
     private Integer idAccion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_empleado", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_empleado")
     private Empleado empleado;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_gerente_sucursal", nullable = false)
-    private Empleado gerenteSucursal;
+    @Column(name = "username_gerente", length = 50)
+    private String usernameGerente;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_gerente_general")
-    private Empleado gerenteGeneral;
-
-    @Column(name = "tipo_accion", nullable = false, length = 60)
+    @Column(name = "tipo_accion")
     private String tipoAccion;
 
-    @Column(name = "descripcion", length = 300)
-    private String descripcion;
-
-    @Column(name = "estado")
+    @Column
     private String estado;
 
-    @Column(name = "fecha_solicitud", insertable = false, updatable = false)
-    private LocalDateTime fechaSolicitud;
+    @Column(columnDefinition = "TEXT")
+    private String observaciones;
+
+    @Column(name = "fecha_solicitud")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaSolicitud;
 
     @Column(name = "fecha_resolucion")
     private LocalDateTime fechaResolucion;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_gerente_general")
+    private Empleado gerenteGeneral;
 
     public Integer getIdAccion() {
         return idAccion;
@@ -66,20 +67,12 @@ public class AccionPersonal implements Serializable {
         this.empleado = empleado;
     }
 
-    public Empleado getGerenteSucursal() {
-        return gerenteSucursal;
+    public String getUsernameGerente() {
+        return usernameGerente;
     }
 
-    public void setGerenteSucursal(Empleado gerenteSucursal) {
-        this.gerenteSucursal = gerenteSucursal;
-    }
-
-    public Empleado getGerenteGeneral() {
-        return gerenteGeneral;
-    }
-
-    public void setGerenteGeneral(Empleado gerenteGeneral) {
-        this.gerenteGeneral = gerenteGeneral;
+    public void setUsernameGerente(String usernameGerente) {
+        this.usernameGerente = usernameGerente;
     }
 
     public String getTipoAccion() {
@@ -90,14 +83,6 @@ public class AccionPersonal implements Serializable {
         this.tipoAccion = tipoAccion;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public String getEstado() {
         return estado;
     }
@@ -106,12 +91,20 @@ public class AccionPersonal implements Serializable {
         this.estado = estado;
     }
 
-    public LocalDateTime getFechaSolicitud() {
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public Date getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public String getFechaSolicitudTexto() {
-        return fechaSolicitud == null ? "" : fechaSolicitud.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    public void setFechaSolicitud(Date fechaSolicitud) {
+        this.fechaSolicitud = fechaSolicitud;
     }
 
     public LocalDateTime getFechaResolucion() {
@@ -120,5 +113,13 @@ public class AccionPersonal implements Serializable {
 
     public void setFechaResolucion(LocalDateTime fechaResolucion) {
         this.fechaResolucion = fechaResolucion;
+    }
+    
+    public Empleado getGerenteGeneral() {
+        return gerenteGeneral;
+    }
+    
+    public void setGerenteGeneral(Empleado gerenteGeneral) {
+        this.gerenteGeneral = gerenteGeneral;
     }
 }

@@ -1,32 +1,29 @@
 package com.spidercoders.dwf.servicios;
 
-import java.util.List;
-
-import com.spidercoders.dwf.dao.EmpleadoDao;
 import com.spidercoders.dwf.pojos.Empleado;
 import com.spidercoders.dwf.pojos.Usuario;
 
-public class EmpleadoService {
+import java.util.List;
 
-    private final EmpleadoDao empleadoDao = new EmpleadoDao();
+public interface EmpleadoService {
 
-    public Long contarEmpleadosActivos() {
-        return empleadoDao.contarActivos();
-    }
+    List<Empleado> findAll();
 
-    public List<Empleado> listarGerentesDisponibles() {
-        return empleadoDao.listarGerentesDisponibles();
-    }
+    List<Empleado> findByGerente(String usernameGerente);
 
-    public Empleado buscarPorUsuario(Usuario usuario) {
-        return empleadoDao.buscarPorUsuario(usuario);
-    }
+    Empleado findById(Integer id);
 
-    public Empleado buscarPorId(Integer idEmpleado) {
-        return empleadoDao.buscarPorId(idEmpleado);
-    }
+    void save(Empleado empleado);
 
-    public void actualizar(Empleado empleado) {
-        empleadoDao.actualizar(empleado);
-    }
+    void update(Empleado empleado);
+    
+    Long contarEmpleadosActivos();
+
+    List<Empleado> listarGerentesDisponibles();
+
+    Empleado buscarPorUsuario(Usuario usuario);
+
+    Empleado buscarPorId(Integer idEmpleado);
+
+    void actualizar(Empleado empleado);
 }

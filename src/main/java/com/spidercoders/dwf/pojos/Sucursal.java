@@ -1,38 +1,35 @@
 package com.spidercoders.dwf.pojos;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "sucursales")
-public class Sucursal implements Serializable {
+public class Sucursal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sucursal")
     private Integer idSucursal;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "direccion", nullable = false, length = 200)
+    @Column(length = 255)
     private String direccion;
 
-    @Column(name = "telefono", length = 20)
+    @Column(length = 15)
     private String telefono;
 
-    @Column(name = "estado")
+    @Column
     private Integer estado;
-
-    @Column(name = "fecha_creacion", insertable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
 
     public Integer getIdSucursal() {
         return idSucursal;
@@ -73,8 +70,5 @@ public class Sucursal implements Serializable {
     public void setEstado(Integer estado) {
         this.estado = estado;
     }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
+    
 }

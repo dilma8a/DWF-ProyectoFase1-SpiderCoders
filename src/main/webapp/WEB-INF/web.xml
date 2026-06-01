@@ -6,6 +6,11 @@
 
     <display-name>DWF-ProyectoFase1-SpiderCoders</display-name>
 
+    <!-- Weld CDI: inicializa BeanManager para que Mojarra pueda arrancar en Tomcat -->
+    <listener>
+        <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+    </listener>
+
     <context-param>
         <param-name>com.sun.faces.enableCdiResolverChain</param-name>
         <param-value>false</param-value>

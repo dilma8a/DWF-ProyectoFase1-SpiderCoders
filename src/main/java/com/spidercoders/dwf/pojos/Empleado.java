@@ -1,9 +1,5 @@
 package com.spidercoders.dwf.pojos;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,50 +8,53 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "empleados")
-public class Empleado implements Serializable {
+public class Empleado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_empleado")
     private Integer idEmpleado;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    @Column(nullable = false, length = 100)
+    private String nombre;
 
+    @Column(nullable = false, length = 100, unique = true)
+    private String correo;
+
+    @Column(nullable = false, length = 255)
+    private String clave;
+
+    @Column(name = "tipo_empleado", nullable = false)
+    private String tipoEmpleado;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal salario;
+
+    @Column(name = "fecha_ingreso")
+    @Temporal(TemporalType.DATE)
+    private Date fechaIngreso;
+
+    @Column
+    private String estado;
+
+    @Column(name = "username_gerente", length = 50)
+    private String usernameGerente;
+
+    @Column(name = "fecha_creacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_sucursal", nullable = false)
     private Sucursal sucursal;
-
-    @Column(name = "nombres", nullable = false, length = 80)
-    private String nombres;
-
-    @Column(name = "apellidos", nullable = false, length = 80)
-    private String apellidos;
-
-    @Column(name = "dui", nullable = false, unique = true, length = 10)
-    private String dui;
-
-    @Column(name = "telefono", length = 20)
-    private String telefono;
-
-    @Column(name = "cargo", nullable = false, length = 80)
-    private String cargo;
-
-    @Column(name = "salario")
-    private BigDecimal salario;
-
-    @Column(name = "estado")
-    private String estado;
-
-    @Column(name = "fecha_contratacion")
-    private LocalDate fechaContratacion;
 
     public Integer getIdEmpleado() {
         return idEmpleado;
@@ -65,60 +64,36 @@ public class Empleado implements Serializable {
         this.idEmpleado = idEmpleado;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Sucursal getSucursal() {
-        return sucursal;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public String getNombres() {
-        return nombres;
+    public String getClave() {
+        return clave;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getTipoEmpleado() {
+        return tipoEmpleado;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getDui() {
-        return dui;
-    }
-
-    public void setDui(String dui) {
-        this.dui = dui;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
+    public void setTipoEmpleado(String tipoEmpleado) {
+        this.tipoEmpleado = tipoEmpleado;
     }
 
     public BigDecimal getSalario() {
@@ -129,6 +104,14 @@ public class Empleado implements Serializable {
         this.salario = salario;
     }
 
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
     public String getEstado() {
         return estado;
     }
@@ -137,16 +120,28 @@ public class Empleado implements Serializable {
         this.estado = estado;
     }
 
-    public LocalDate getFechaContratacion() {
-        return fechaContratacion;
+    public String getUsernameGerente() {
+        return usernameGerente;
     }
 
-    public void setFechaContratacion(LocalDate fechaContratacion) {
-        this.fechaContratacion = fechaContratacion;
+    public void setUsernameGerente(String usernameGerente) {
+        this.usernameGerente = usernameGerente;
     }
 
-    @Transient
-    public String getNombreCompleto() {
-        return (nombres == null ? "" : nombres) + " " + (apellidos == null ? "" : apellidos);
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+    
+    public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+	
 }

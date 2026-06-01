@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Lista de Empleados | BAS</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"/>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bas-blue-dark: #1a2f5a;
+            --bas-gold: #d48806;
+            --bas-gold-hover: #b77605;
+            --text-main: #1f366a;
+            --text-muted: #6b7280;
+            --line-soft: #d7dde6;
+            --bg-page: #d8dade;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg-page); }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 260px; min-height: 100vh; background: #1a2f5a;
+            position: fixed; left: 0; top: 0;
+            display: flex; flex-direction: column; padding: 0;
+        }
+        .sidebar-brand { padding: 28px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand-name { color: white; font-weight: 800; font-size: 1.1rem; margin: 0; }
+        .brand-role { color: #c8d0dc; font-size: 0.78rem; margin: 2px 0 0; }
+        .nav-section { padding: 20px 12px 8px; }
+        .nav-label {
+            color: #8896a7; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 0 8px; margin-bottom: 4px; display: block;
+        }
+        .nav-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 16px; border-radius: 8px;
+            color: #c8d0dc; text-decoration: none;
+            font-size: 0.9rem; font-weight: 500; margin-bottom: 2px;
+            transition: all 0.15s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(212,136,6,0.18); color: white;
+            border-left: 3px solid #d48806;
+        }
+        .nav-sub-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 16px 9px 32px; border-radius: 8px;
+            color: #a0aab8; text-decoration: none;
+            font-size: 0.85rem; margin-bottom: 2px;
+        }
+        .nav-sub-link:hover { background: rgba(255,255,255,0.06); color: white; }
+        .nav-sub-link.active { background: rgba(212,136,6,0.18); color: white; border-left: 3px solid #d48806; }
+        .sidebar-footer {
+            margin-top: auto; padding: 16px 12px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .user-info { padding: 0 8px 10px; }
+        .user-name { color: white; font-weight: 600; font-size: 0.88rem; }
+        .user-role { color: #8896a7; font-size: 0.75rem; }
+        .logout-link {
+            display: block; padding: 9px 16px; border-radius: 8px;
+            color: #fc8181; text-decoration: none;
+            font-size: 0.85rem; font-weight: 600;
+        }
+        .logout-link:hover { background: rgba(252,129,129,0.12); }
+
+        /* ── Main content ── */
+        .main-content {
+            margin-left: 260px; padding: 28px;
+            background: #d8dade; min-height: 100vh;
+        }
+        .page-header { margin-bottom: 24px; }
+        .page-title  { margin: 0; color: #1a2f5a; font-size: 1.6rem; font-weight: 800; }
+        .page-subtitle { margin: 4px 0 0; color: #6b7280; font-size: 0.9rem; }
+
+        /* ── Card ── */
+        .card {
+            background: white; border-radius: 12px; padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .section-title { margin: 0; color: #1a2f5a; font-size: 1.1rem; font-weight: 700; }
+
+        /* ── Table header row ── */
+        .table-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 16px;
+        }
+
+        /* ── Table ── */
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table thead tr { background: #1a2f5a; color: white; }
+        .data-table th {
+            padding: 13px 16px; text-align: left;
+            font-size: 0.85rem; font-weight: 600; white-space: nowrap;
+        }
+        .data-table td {
+            padding: 13px 16px; font-size: 0.88rem; color: #374151;
+            border-bottom: 1px solid #f0f4ff; vertical-align: middle;
+        }
+        .data-table tbody tr:hover { background: #f8fafc; }
+
+        /* ── Badges ── */
+        .badge {
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-danger  { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .tipo-badge {
+            background: #eff6ff; color: #1e40af;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+        }
+
+        /* ── Buttons ── */
+        .btn-primary {
+            background: #d48806; color: white; border: 0;
+            border-radius: 10px; padding: 10px 20px;
+            font-size: 0.88rem; font-weight: 700; cursor: pointer;
+            font-family: 'Inter', sans-serif; text-decoration: none;
+            display: inline-block; transition: background 0.15s;
+        }
+        .btn-primary:hover { background: #b77605; }
+        .btn-danger {
+            background: #dc2626; color: white; border: 0;
+            border-radius: 6px; padding: 6px 14px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            font-family: 'Inter', sans-serif; transition: background 0.15s;
+        }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+        /* ── Alerts ── */
+        .alert-success {
+            background: #d1fae5; color: #065f46;
+            padding: 14px 20px; border-radius: 8px;
+            margin-bottom: 16px; font-weight: 600; font-size: 0.9rem;
+        }
+        .alert-error {
+            background: #fee2e2; color: #991b1b;
+            padding: 14px 20px; border-radius: 8px;
+            margin-bottom: 16px; font-weight: 600; font-size: 0.9rem;
+        }
+
+        /* ── Empty state ── */
+        .empty-state { text-align: center; padding: 48px 20px; color: #6b7280; }
+        .empty-state p { font-size: 1rem; margin-bottom: 16px; }
+
+        @media (max-width: 768px) {
+            .main-content { margin-left: 0; }
+            .sidebar { position: relative; width: 100%; min-height: auto; }
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <f:metadata>
+        <f:viewAction action="#{empleadoBean.cargarEmpleados}" />
+    </f:metadata>
+
+    <!-- ══════════════ SIDEBAR ══════════════ -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <p class="brand-name">BAS</p>
+            <p class="brand-role">Banco Agricola Salvadoreño</p>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-label">Principal</span>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/inicio.xhtml"
+                          styleClass="nav-link">
+                &#x1F3E0;&#160; Dashboard
+            </h:outputLink>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-label">Empleados</span>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/registrar.xhtml"
+                          styleClass="nav-sub-link">
+                &#x2795;&#160; Registrar empleado
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/lista.xhtml"
+                          styleClass="nav-sub-link active">
+                &#x1F4CB;&#160; Lista de empleados
+            </h:outputLink>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-label">Préstamos</span>
+            <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/prestamos/lista.xhtml"
+                          styleClass="nav-sub-link">
+                &#x1F4C4;&#160; Revisar solicitudes
+            </h:outputLink>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-name">#{sessionScope.username}</div>
+                <div class="user-role">Gerente de Sucursal</div>
+            </div>
+            <h:form>
+                <h:commandLink action="#{navigationBean.logout}" styleClass="logout-link">
+                    &#x1F6AA;&#160; Cerrar sesión
+                </h:commandLink>
+            </h:form>
+        </div>
+    </nav>
+
+    <!-- ══════════════ CONTENIDO PRINCIPAL ══════════════ -->
+    <main class="main-content">
+
+        <div class="page-header">
+            <h1 class="page-title">Lista de Empleados</h1>
+            <p class="page-subtitle">Personal registrado en la sucursal</p>
+        </div>
+
+        <div class="card">
+            <div class="table-header">
+                <h3 class="section-title">Empleados de la Sucursal</h3>
+                <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/registrar.xhtml"
+                              styleClass="btn-primary">+ Registrar Nuevo</h:outputLink>
+            </div>
+
+            <h:panelGroup layout="block" rendered="#{not empty empleadoBean.mensajeResultado}">
+                <div class="alert-success">#{empleadoBean.mensajeResultado}</div>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{not empty empleadoBean.empleados}">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Tipo</th>
+                            <th>Salario</th>
+                            <th>Estado</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{empleadoBean.empleados}" var="emp">
+                            <tr>
+                                <td>#{emp.idEmpleado}</td>
+                                <td>#{emp.nombre}</td>
+                                <td>#{emp.correo}</td>
+                                <td>
+                                    <span class="tipo-badge">
+                                        #{emp.tipoEmpleado == 'CAJERO' ? 'Cajero' :
+                                          emp.tipoEmpleado == 'LIMPIEZA' ? 'Limpieza' :
+                                          emp.tipoEmpleado == 'SECRETARIA' ? 'Secretaria' : 'Asesor Mesa'}
+                                    </span>
+                                </td>
+                                <td>$<h:outputText value="#{emp.salario}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                                <td>
+                                    <span class="badge #{emp.estado == 'ACTIVO' ? 'badge-success' : 'badge-danger'}">
+                                        #{emp.estado}
+                                    </span>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{emp.fechaIngreso}" rendered="#{emp.fechaIngreso != null}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </td>
+                                <td>
+                                    <h:form>
+                                        <h:commandButton value="Dar de Baja"
+                                                         action="#{empleadoBean.darDeBaja(emp.idEmpleado)}"
+                                                         styleClass="btn-danger btn-sm"
+                                                         rendered="#{emp.estado == 'ACTIVO'}"
+                                                         onclick="return confirm('¿Confirmar baja del empleado #{emp.nombre}?')"/>
+                                        <h:panelGroup rendered="#{emp.estado == 'INACTIVO'}">
+                                            <span style="color:#6b7280;font-size:0.82rem;">Inactivo</span>
+                                        </h:panelGroup>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{empty empleadoBean.empleados}">
+                <div class="empty-state">
+                    <p>No hay empleados registrados todavía.</p>
+                    <h:outputLink value="#{request.contextPath}/views/secure/gerente-sucursal/empleados/registrar.xhtml"
+                                  styleClass="btn-primary">
+                        Registrar primer empleado
+                    </h:outputLink>
+                </div>
+            </h:panelGroup>
+        </div>
+
+    </main>
+
+</h:body>
+</html>
